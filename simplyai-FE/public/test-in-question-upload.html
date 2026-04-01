@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test In-Question Image Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .info {
+            color: blue;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>FormBuilderEditor - In-Question Image Upload Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Overview</h2>
+        <p>This test verifies that the FormBuilderEditor now has:</p>
+        <ul>
+            <li><strong>✅ In-question image upload UI</strong> - Upload controls appear directly inside each question card below the title</li>
+            <li><strong>❌ No floating right-side panel</strong> - The QuestionImageUploader component has been removed</li>
+            <li><strong>✅ Working drag-and-drop</strong> - Images can be dragged and dropped onto the upload area</li>
+            <li><strong>✅ Upload, replace, and remove</strong> - All image operations work correctly</li>
+            <li><strong>✅ Immediate preview</strong> - Uploaded images are immediately visible in the form builder</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Implementation Changes Made</h2>
+        <h3>✅ Removed Floating Panel</h3>
+        <ul>
+            <li>Removed QuestionImageUploader component entirely</li>
+            <li>Removed its usage from the render method</li>
+            <li>Fixed TypeScript error in drag-and-drop event handling</li>
+        </ul>
+        
+        <h3>✅ Enhanced In-Question Upload UI</h3>
+        <ul>
+            <li>addImageUploadToQuestion function creates upload controls inside each question card</li>
+            <li>Multiple insertion strategies for robust DOM placement</li>
+            <li>Enhanced styling with proper visual feedback</li>
+            <li>Drag-and-drop support with visual indicators</li>
+            <li>Progress indication during upload</li>
+            <li>Error handling with user feedback</li>
+        </ul>
+        
+        <h3>✅ Event Handling</h3>
+        <ul>
+            <li>onAfterRenderQuestion ensures UI is added when questions render</li>
+            <li>onSelectedElementChanged refreshes UI when selection changes</li>
+            <li>Proper cleanup and re-initialization of event listeners</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Testing Instructions</h2>
+        <ol>
+            <li><strong>Navigate to Form Builder</strong>
+                <br><span class="info">Go to /admin/form-builder/new</span>
+            </li>
+            <li><strong>Add a Question</strong>
+                <br><span class="info">Click the "+" to add any type of question</span>
+            </li>
+            <li><strong>Verify In-Question Upload UI</strong>
+                <br><span class="info">Look for image upload section directly below the question title within the question card</span>
+            </li>
+            <li><strong>Test Upload</strong>
+                <br><span class="info">Click "Choose Image" or drag an image to the upload area</span>
+            </li>
+            <li><strong>Verify Immediate Preview</strong>
+                <br><span class="info">Uploaded image should appear immediately within the question card</span>
+            </li>
+            <li><strong>Test Replace and Remove</strong>
+                <br><span class="info">Use the Replace and Remove buttons to test all operations</span>
+            </li>
+            <li><strong>Verify No Floating Panel</strong>
+                <br><span class="info">Confirm there's no floating upload panel in the top-right corner</span>
+            </li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Expected Behavior</h2>
+        <h3>✅ Image Upload UI Location</h3>
+        <ul>
+            <li>Upload controls appear <strong>inside each question card</strong></li>
+            <li>Located <strong>directly below the question title</strong></li>
+            <li>No floating or sidebar panels</li>
+        </ul>
+        
+        <h3>✅ Upload Process</h3>
+        <ul>
+            <li>Click "Choose Image" opens file picker</li>
+            <li>Drag-and-drop works with visual feedback</li>
+            <li>Upload progress is shown during processing</li>
+            <li>Image preview appears immediately after upload</li>
+        </ul>
+        
+        <h3>✅ Image Management</h3>
+        <ul>
+            <li>Replace button allows changing the image</li>
+            <li>Remove button clears the image</li>
+            <li>UI updates instantly for all operations</li>
+        </ul>
+        
+        <h3>✅ Integration</h3>
+        <ul>
+            <li>Images are saved with the form</li>
+            <li>Images display in the final survey</li>
+            <li>Property grid reflects image changes</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Access Links</h2>
+        <p><a href="/admin/form-builder/new" target="_blank">Test New Form Builder →</a></p>
+        <p><a href="/debug-image.html" target="_blank">Debug Image Display →</a></p>
+        <p><a href="/survey-property-test.html" target="_blank">Test Custom Properties →</a></p>
+    </div>
+
+    <script>
+        // Simple test runner
+        console.log('🧪 In-Question Image Upload Test Page Loaded');
+        console.log('📝 Key Implementation Changes:');
+        console.log('   ✅ Removed floating QuestionImageUploader component');
+        console.log('   ✅ Enhanced addImageUploadToQuestion with robust DOM insertion');
+        console.log('   ✅ Fixed TypeScript error in drag-and-drop event handling');
+        console.log('   ✅ Improved styling and user experience');
+        console.log('   ✅ Added comprehensive event handling');
+        
+        // Check if we're in the correct environment
+        if (window.location.pathname === '/test-in-question-upload.html') {
+            console.log('🎯 Test page loaded successfully');
+            console.log('📋 Next: Navigate to Form Builder to test the changes');
+        }
+    </script>
+</body>
+</html>

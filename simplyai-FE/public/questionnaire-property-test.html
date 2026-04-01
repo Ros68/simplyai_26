@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Questionnaire Property Test</title>
+    <script src="https://unpkg.com/survey-core@1.11.7/survey.core.min.js"></script>
+</head>
+<body>
+    <h1>Testing Custom Properties in Regular Survey</h1>
+    
+    <script>
+        // Register custom properties exactly like in the React app
+        console.log('Registering custom properties...');
+        
+        if (!Survey.Serializer.findProperty('question', 'questionImage')) {
+            Survey.Serializer.addProperty('question', {
+                name: 'questionImage:text',
+                displayName: 'Question Image',
+                category: 'Custom Properties',
+                visibleIndex: 102,
+                isRequired: false,
+            });
+            console.log('✅ Registered questionImage property');
+        }
+        
+        // Test survey JSON with questionImage (from actual database)
+        const surveyJSON = {
+            "pages": [
+                {
+                    "name": "page1",
+                    "elements": [
+                        {
+                            "name": "question1",
+                            "type": "text",
+                            "title": "Question with Image",
+                            "description": "This question should display an image below the title",
+                            "questionImage": "http://localhost:4000/uploads/logo-1751987807219-433703543.jpg",
+                            "questionImageDescription": "Test image for question"
+                        }
+                    ]
+                }
+            ],
+            "title": "Question Image Test Form",
+            "description": "Testing question image display functionality"
+        };
+        
+        // Create survey
+        console.log('Creating survey with JSON:', surveyJSON);
+        const survey = new Survey.Model(surveyJSON);
+        
+        // Debug: Check if custom properties are accessible
+        survey.onAfterRenderQuestion.add((sender, options) => {
+            console.log('=== Question Rendered ===');
+            console.log('Question Name:', options.question.name);
+            console.log('Question Type:', options.question.getType());
+            console.log('Direct access - questionImage:', options.question.questionImage);
+            console.log('Question keys:', Object.keys(options.question));
+            
+            // Try getPropertyValue
+            if (typeof options.question.getPropertyValue === 'function') {
+                console.log('Via getPropertyValue - questionImage:', options.question.getPropertyValue('questionImage'));
+            }
+            
+            // Try toJSON
+            if (options.question.toJSON) {
+                const json = options.question.toJSON();
+                console.log('JSON representation:', json);
+                console.log('JSON questionImage:', json.questionImage);
+            }
+            
+            // Test if image displays
+            if (options.question.questionImage || (options.question.toJSON && options.question.toJSON().questionImage)) {
+                const imageUrl = options.question.questionImage || options.question.toJSON().questionImage;
+                console.log('✅ Found image URL:', imageUrl);
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.style.marginTop = '10px';
+                imageDiv.innerHTML = `
+                    <div style="color: blue; font-weight: bold; margin-bottom: 5px;">Question Image:</div>
+                    <img src="${imageUrl}" style="max-width: 300px; height: auto; border: 1px solid #ccc;" alt="Question Image" />
+                `;
+                options.htmlElement.appendChild(imageDiv);
+            } else {
+                console.log('❌ No image URL found');
+            }
+        });
+        
+        // Render survey
+        survey.render(document.body);
+    </script>
+</body>
+</html>

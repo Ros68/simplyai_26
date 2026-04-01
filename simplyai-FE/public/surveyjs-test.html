@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SurveyJS Upload Test</title>
+    <link href="https://unpkg.com/survey-core/defaultV2.min.css" type="text/css" rel="stylesheet" />
+    <link href="https://unpkg.com/survey-creator-core/survey-creator-core.min.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="https://unpkg.com/survey-core/survey.core.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/survey-creator-core/survey-creator-core.min.js"></script>
+</head>
+<body>
+    <div id="creatorElement" style="height: 100vh;"></div>
+    
+    <script>
+        const creator = new SurveyCreator.SurveyCreator({
+            showToolbox: true,
+            showPropertyGrid: true
+        });
+        
+        // Configure upload
+        creator.uploadFiles = function(files, question, callback) {
+            console.log('Upload called with:', files, question);
+            
+            if (!files || files.length === 0) {
+                callback('error', []);
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', files[0]);
+            
+            fetch('/api/upload/image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Upload response:', data);
+                
+                if (data.success) {
+                    // Test with exact format
+                    const result = [{
+                        name: data.data.name,
+                        content: data.data.content
+                    }];
+                    
+                    console.log('Calling callback with:', result);
+                    callback('success', result);
+                } else {
+                    callback('error', []);
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                callback('error', []);
+            });
+        };
+        
+        // Simple survey with logo
+        creator.JSON = {
+            "logo": "https://via.placeholder.com/150x50?text=Logo",
+            "pages": [{
+                "name": "page1",
+                "elements": [{
+                    "type": "text",
+                    "name": "question1",
+                    "title": "Test Question"
+                }]
+            }]
+        };
+        
+        creator.render(document.getElementById("creatorElement"));
+    </script>
+</body>
+</html>

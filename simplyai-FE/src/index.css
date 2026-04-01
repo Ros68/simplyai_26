@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #0ea5e9;
+    --color-secondary: #7e69ab;
+    --color-accent: #403e43;
+    --color-primary-700: color-mix(in srgb, var(--color-primary) 80%, black);
+    --color-primary-500: color-mix(in srgb, var(--color-primary) 60%, white);
+    --color-primary-50: color-mix(in srgb, var(--color-primary) 8%, white);
+    --color-primary-100: color-mix(in srgb, var(--color-primary) 15%, white);
+    --color-indigo: color-mix(in srgb, var(--color-primary) 60%, blue);
+
+    --color-primary-300: color-mix(in srgb, var(--color-primary) 70%, white);
+    --color-secondary-700: color-mix(
+      in srgb,
+      var(--color-secondary) 80%,
+      black
+    );
+    --color-secondary-500: color-mix(
+      in srgb,
+      var(--color-secondary) 60%,
+      white
+    );
+    --color-secondary-200: color-mix(
+      in srgb,
+      var(--color-secondary) 30%,
+      white
+    );
+    --color-secondary-100: color-mix(
+      in srgb,
+      var(--color-secondary) 15%,
+      white
+    );
+    --color-secondary-50: color-mix(in srgb, var(--color-secondary) 8%, white);
+    --background: 260 33% 98%;
+    --foreground: 260 10% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 260 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 260 10% 10%;
+
+    --primary: 260 80% 75%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 260 30% 90%;
+    --secondary-foreground: 260 10% 10%;
+
+    --muted: 260 10% 90%;
+    --muted-foreground: 260 10% 40%;
+
+    --accent: 260 80% 95%;
+    --accent-foreground: 260 10% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 260 20% 85%;
+    --input: 260 20% 85%;
+    --ring: 260 80% 75%;
+
+    --radius: 1rem;
+
+    --sidebar-background: 260 33% 98%;
+    --sidebar-foreground: 260 10% 40%;
+    --sidebar-primary: 260 80% 75%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 260 80% 95%;
+    --sidebar-accent-foreground: 260 10% 10%;
+    --sidebar-border: 260 20% 85%;
+    --sidebar-ring: 260 80% 75%;
+
+    /* Dynamic font family variable - can be updated from settings */
+    --font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    --base-font-size: 16px;
+  }
+
+  .dark {
+    --background: 260 15% 10%;
+    --foreground: 0 0% 95%;
+
+    --card: 260 15% 15%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 260 15% 15%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 260 70% 70%;
+    --primary-foreground: 260 10% 10%;
+
+    --secondary: 260 15% 25%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 260 15% 25%;
+    --muted-foreground: 260 10% 70%;
+
+    --accent: 260 15% 25%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 260 15% 25%;
+    --input: 260 15% 25%;
+    --ring: 260 70% 70%;
+
+    --sidebar-background: 260 15% 10%;
+    --sidebar-foreground: 260 10% 70%;
+    --sidebar-primary: 260 70% 70%;
+    --sidebar-primary-foreground: 260 10% 10%;
+    --sidebar-accent: 260 15% 20%;
+    --sidebar-accent-foreground: 260 10% 70%;
+    --sidebar-border: 260 15% 25%;
+    --sidebar-ring: 260 70% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-family) !important;
+    font-size: var(--base-font-size, 16px);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-family) !important;
+    @apply font-semibold;
+  }
+
+  .btn-gradient {
+    @apply bg-gradient-to-r from-simoly-purple to-simoly-purple-dark text-white;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .tooltip-container {
+    @apply absolute right-0 top-0 bg-white p-4 rounded-lg shadow-lg max-w-xs z-10 animate-fade-in;
+  }
+}

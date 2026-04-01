@@ -1,0 +1,107 @@
+/* ============================================================
+   Questionnaire CSS - Uses CSS variables set by app settings
+   ============================================================ */
+
+/* All questionnaire elements inherit the app color scheme */
+
+/* Primary buttons in questionnaire */
+.questionnaire-container button[type="submit"],
+.questionnaire-container .btn-primary,
+.questionnaire-container .next-button,
+.questionnaire-container .submit-button {
+  background-color: var(--color-primary) !important;
+  color: var(--color-primary-text, #fff) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.questionnaire-container button[type="submit"]:hover,
+.questionnaire-container .btn-primary:hover,
+.questionnaire-container .next-button:hover,
+.questionnaire-container .submit-button:hover {
+  background-color: var(--color-secondary) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+/* Secondary/outline buttons */
+.questionnaire-container button[type="button"],
+.questionnaire-container .btn-secondary,
+.questionnaire-container .back-button,
+.questionnaire-container .prev-button {
+  color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.questionnaire-container button[type="button"]:hover,
+.questionnaire-container .btn-secondary:hover,
+.questionnaire-container .back-button:hover,
+.questionnaire-container .prev-button:hover {
+  background-color: var(--color-accent) !important;
+}
+
+/* Progress bar */
+.questionnaire-container .progress-bar,
+.questionnaire-container [role="progressbar"] > div,
+.questionnaire-container .progress-fill {
+  background-color: var(--color-primary) !important;
+}
+
+/* Selected options / checkboxes / radio */
+.questionnaire-container input[type="radio"]:checked,
+.questionnaire-container input[type="checkbox"]:checked {
+  accent-color: var(--color-primary);
+}
+
+.questionnaire-container .option-selected,
+.questionnaire-container .answer-selected,
+.questionnaire-container [data-selected="true"] {
+  border-color: var(--color-primary) !important;
+  background-color: var(--color-accent) !important;
+}
+
+/* Active/focused states */
+.questionnaire-container input:focus,
+.questionnaire-container textarea:focus,
+.questionnaire-container select:focus {
+  border-color: var(--color-primary) !important;
+  outline-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 20%, transparent) !important;
+}
+
+/* Links */
+.questionnaire-container a {
+  color: var(--color-primary);
+}
+.questionnaire-container a:hover {
+  color: var(--color-secondary);
+}
+
+/* Headings accent */
+.questionnaire-container h1,
+.questionnaire-container h2,
+.questionnaire-container .question-title {
+  color: var(--color-primary);
+}
+
+/* Card/box backgrounds */
+.questionnaire-container .card,
+.questionnaire-container .question-card {
+  border-color: var(--color-accent);
+}
+
+/* Button border-radius from button style variable */
+.questionnaire-container button {
+  border-radius: var(--button-radius, 0.5rem);
+}
+
+/* Font family from app settings */
+.questionnaire-container,
+.questionnaire-container * {
+  font-family: var(--font-family, 'Poppins', sans-serif) !important;
+  font-size: var(--font-size-base, 1rem);
+}
+
+/* Frame/background color */
+.questionnaire-wrapper,
+.questionnaire-background {
+  background-color: var(--color-frame-bg, #f8f7ff);
+}

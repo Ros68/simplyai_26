@@ -1,0 +1,12 @@
+
+project_id = "wymipfguuzpsacqrsalh"
+
+[functions.generate-report]
+verify_jwt = true
+
+[[storage.buckets]]
+name = "page-images"
+public = true
+file_size_limit = "10MB"
+allowed_mime_types = ["image/png", "image/jpeg", "image/gif", "image/webp", "image/svg+xml"]
+

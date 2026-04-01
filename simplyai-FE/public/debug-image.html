@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Questionnaire Image Issue</title>
+</head>
+<body>
+    <h1>Debug: Check if image URL is accessible</h1>
+    
+    <div id="test-result"></div>
+    
+    <script>
+        // Test the exact image URL from the form
+        const imageUrl = 'http://localhost:4000/uploads/logo-1751987807219-433703543.jpg';
+        
+        console.log('Testing image URL:', imageUrl);
+        
+        // Create test image element
+        const img = new Image();
+        img.onload = function() {
+            console.log('✅ Image loaded successfully');
+            document.getElementById('test-result').innerHTML = `
+                <p style="color: green;">✅ Image is accessible!</p>
+                <img src="${imageUrl}" style="max-width: 300px; border: 1px solid #ccc;" alt="Test image">
+            `;
+        };
+        img.onerror = function() {
+            console.log('❌ Image failed to load');
+            document.getElementById('test-result').innerHTML = `
+                <p style="color: red;">❌ Image is NOT accessible at: ${imageUrl}</p>
+                <p>This could be a CORS issue or the file doesn't exist.</p>
+            `;
+        };
+        img.src = imageUrl;
+        
+        // Also test fetch
+        fetch(imageUrl)
+            .then(response => {
+                console.log('Fetch response:', response.status, response.statusText);
+                if (response.ok) {
+                    console.log('✅ Image is accessible via fetch');
+                } else {
+                    console.log('❌ Image fetch failed:', response.status);
+                }
+            })
+            .catch(error => {
+                console.log('❌ Fetch error:', error);
+            });
+    </script>
+</body>
+</html>

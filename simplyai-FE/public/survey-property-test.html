@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SurveyJS Property Test</title>
+    <script src="https://unpkg.com/survey-core@1.11.7/survey.core.min.js"></script>
+    <script src="https://unpkg.com/survey-react-ui@1.11.7/survey-react-ui.min.js"></script>
+</head>
+<body>
+    <h1>SurveyJS Property Test</h1>
+    <div id="surveyElement"></div>
+    
+    <script>
+        // Register custom properties
+        Survey.Serializer.addProperty('question', {
+            name: 'questionImage:text',
+            displayName: 'Question Image',
+            category: 'Custom Properties',
+            visibleIndex: 102,
+            isRequired: false,
+        });
+        
+        // Test survey JSON with questionImage
+        const surveyJSON = {
+            "title": "Property Test Survey",
+            "pages": [
+                {
+                    "name": "page1",
+                    "elements": [
+                        {
+                            "type": "text",
+                            "name": "question1",
+                            "title": "Test Question",
+                            "questionImage": "http://localhost:4000/uploads/1737047800000_sample.jpg"
+                        }
+                    ]
+                }
+            ]
+        };
+        
+        // Create survey
+        const survey = new Survey.Model(surveyJSON);
+        
+        // Debug: Log question properties
+        survey.onAfterRenderQuestion.add((sender, options) => {
+            console.log('Question Name:', options.question.name);
+            console.log('Question Image:', options.question.questionImage);
+            console.log('Question JSON:', options.question.toJSON());
+            
+            // Try to add image if present
+            if (options.question.questionImage) {
+                const imageDiv = document.createElement('div');
+                imageDiv.style.marginTop = '10px';
+                imageDiv.innerHTML = `<img src="${options.question.questionImage}" style="max-width: 300px; height: auto; border: 1px solid #ccc;" alt="Question Image" />`;
+                options.htmlElement.appendChild(imageDiv);
+            }
+        });
+        
+        // Render survey
+        survey.render(document.getElementById("surveyElement"));
+        
+        console.log('Survey created:', survey);
+        console.log('Survey JSON:', survey.toJSON());
+    </script>
+</body>
+</html>

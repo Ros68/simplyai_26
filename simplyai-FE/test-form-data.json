@@ -1,0 +1,16 @@
+{
+  "id": "0",
+  "title": "Test Form",
+  "description": "Test description",
+  "surveyJSON": {
+    "pages": [
+      {
+        "name": "page1",
+        "elements": []
+      }
+    ]
+  },
+  "logo": null,
+  "status": "published",
+  "createdBy": "admin"
+}

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Test - SimolyAI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .test-section h2 {
+            color: #555;
+            margin-top: 0;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .loading {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+        .status-label {
+            font-weight: bold;
+        }
+        .status-value {
+            font-family: monospace;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Email Testing Dashboard</h1>
+        
+        <div class="test-section">
+            <h2>1. Email Configuration Status</h2>
+            <p>Check if Brevo email credentials are properly configured.</p>
+            <button onclick="checkEmailStatus()">Check Configuration</button>
+            <div id="statusResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Send Test Email</h2>
+            <p>Send a test payment notification email to your email address.</p>
+            <button onclick="sendTestEmail()">Send Test Email</button>
+            <div id="testResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. Email Troubleshooting</h2>
+            <p>Common issues and solutions:</p>
+            <ul>
+                <li><strong>Authentication Failed:</strong> Check if your Brevo API key is correct</li>
+                <li><strong>Invalid Login:</strong> Ensure you're using the SMTP key, not API key</li>
+                <li><strong>Email not received:</strong> Check spam folder and verify email address</li>
+                <li><strong>Brevo Setup:</strong> Make sure your Brevo account is verified</li>
+            </ul>
+            
+            <h3>Brevo Setup Steps:</h3>
+            <ol>
+                <li>Go to <a href="https://www.brevo.com" target="_blank">brevo.com</a></li>
+                <li>Create account and verify your email</li>
+                <li>Go to Settings → SMTP & API → SMTP</li>
+                <li>Click "Create a new SMTP key"</li>
+                <li>Copy the SMTP key to your .env file</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000/api/email';
+        
+        async function checkEmailStatus() {
+            const button = event.target;
+            const resultDiv = document.getElementById('statusResult');
+            
+            button.disabled = true;
+            button.textContent = 'Checking...';
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result loading';
+            resultDiv.textContent = 'Checking email configuration...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/email-status`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result info';
+                    resultDiv.innerHTML = `
+Email Configuration Status:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${createStatusItem('Configured', data.status.configured ? '✅ Yes' : '❌ No')}
+${createStatusItem('Email Address', data.status.email)}
+${createStatusItem('API Key', data.status.apiKey)}
+${createStatusItem('Checked At', data.status.timestamp)}
+
+${data.status.configured ? 
+    '✅ Email is properly configured!' : 
+    '❌ Email configuration is incomplete. Please check your .env file.'
+}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Error checking status: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Connection error: ${error.message}`;
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Check Configuration';
+            }
+        }
+        
+        async function sendTestEmail() {
+            const button = event.target;
+            const resultDiv = document.getElementById('testResult');
+            
+            button.disabled = true;
+            button.textContent = 'Sending...';
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result loading';
+            resultDiv.textContent = 'Sending test email... This may take a few seconds.';
+            
+            try {
+                const response = await fetch(`${API_BASE}/test-email`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+✅ Test Email Sent Successfully!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${createStatusItem('Recipient', data.recipient)}
+${createStatusItem('Message ID', data.messageId)}
+${createStatusItem('Status', 'Delivered to email provider')}
+
+📧 Check your inbox (and spam folder) for the test email.
+If you don't receive it within a few minutes, check your Brevo configuration.`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+❌ Test Email Failed
+━━━━━━━━━━━━━━━━━━━━━━
+
+Error: ${data.error}
+
+🔧 Troubleshooting:
+• Check your Brevo API key in .env file
+• Ensure you're using SMTP key, not API key
+• Verify your Brevo account is active
+• Check if your email domain is verified`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Connection error: ${error.message}\n\nMake sure your backend server is running on port 4000.`;
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Send Test Email';
+            }
+        }
+        
+        function createStatusItem(label, value) {
+            return `${label.padEnd(15)}: ${value}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Image Position Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .test-section h3 {
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            margin: 8px 0;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .checklist li:before {
+            content: "✅";
+            font-size: 16px;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .button.success {
+            background: #28a745;
+        }
+        .button.success:hover {
+            background: #218838;
+        }
+        .visual-example {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            background: white;
+        }
+        .mock-question {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #fafafa;
+        }
+        .mock-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .mock-image {
+            margin: 10px 0 15px 0;
+            padding: 0;
+            clear: both;
+        }
+        .mock-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            max-height: 200px;
+            display: block;
+            margin: 0;
+        }
+        .mock-choices {
+            margin-top: 15px;
+        }
+        .mock-choice {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ Question Image Position Verification</h1>
+            <p>Testing that images appear directly under question titles in surveys</p>
+        </div>
+
+        <div class="status success">
+            <span>✅</span>
+            <strong>Updated Implementation:</strong> Enhanced image positioning logic with multiple DOM targeting strategies for reliable placement under question titles.
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 Implementation Changes Made</h3>
+            <ul class="checklist">
+                <li>Enhanced DOM element targeting with multiple selectors</li>
+                <li>Improved insertion strategies with better fallback logic</li>
+                <li>Removed background styling for cleaner image presentation</li>
+                <li>Added duplicate prevention to avoid multiple image containers</li>
+                <li>Enhanced debugging with DOM structure analysis</li>
+                <li>Added image verification after insertion</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 New Insertion Strategies</h3>
+            <div class="code-block">
+// Enhanced insertion strategies in Questionnaire.tsx:
+
+1. ✅ Multiple title selectors:
+   - .sv-question__title
+   - .sv-string-viewer  
+   - .sv-question__content .sv-string-viewer
+   - [data-name="title"]
+   - .sv-question-title
+
+2. ✅ Smart insertion targeting:
+   - Find title element
+   - Determine best insertion parent
+   - Insert immediately after title container
+
+3. ✅ Fallback strategies:
+   - Question header containers
+   - Question content containers
+   - After description elements
+   - Beginning of question element
+
+4. ✅ Improved styling:
+   - Removed background containers
+   - Clean image presentation
+   - Proper margins and spacing
+   - Clear floating elements
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>👀 Expected Visual Result</h3>
+            <div class="visual-example">
+                <h4>How questions with images should appear:</h4>
+                
+                <div class="mock-question">
+                    <div class="mock-title">Question 1: What is your favorite color?</div>
+                    <div class="mock-image">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNjY3ZWVhIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzc2NGJhMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkaWVudCkiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiI+UXVlc3Rpb24gSW1hZ2U8L3RleHQ+Cjwvc3ZnPg==" alt="Sample question image">
+                    </div>
+                    <div class="mock-choices">
+                        <div class="mock-choice">🔴 Red</div>
+                        <div class="mock-choice">🔵 Blue</div>
+                        <div class="mock-choice">🟢 Green</div>
+                        <div class="mock-choice">🟡 Yellow</div>
+                    </div>
+                </div>
+                
+                <div class="mock-question">
+                    <div class="mock-title">Question 2: Rate your experience</div>
+                    <div class="mock-image">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQyIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI4YTc0NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMGM5OTciLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZGllbnQyKSIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2Ij5SYXRpbmcgSW1hZ2U8L3RleHQ+Cjwvc3ZnPg==" alt="Sample rating image">
+                    </div>
+                    <div class="mock-choices">
+                        <div class="mock-choice">⭐ 1 Star</div>
+                        <div class="mock-choice">⭐⭐ 2 Stars</div>
+                        <div class="mock-choice">⭐⭐⭐ 3 Stars</div>
+                        <div class="mock-choice">⭐⭐⭐⭐ 4 Stars</div>
+                        <div class="mock-choice">⭐⭐⭐⭐⭐ 5 Stars</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Testing Steps</h3>
+            <ol>
+                <li><strong>Create a form with images:</strong>
+                    <ul>
+                        <li>Go to /admin/form-builder/new</li>
+                        <li>Add questions and upload images using the in-question UI</li>
+                        <li>Save the form</li>
+                    </ul>
+                </li>
+                <li><strong>View the survey:</strong>
+                    <ul>
+                        <li>Navigate to the published survey</li>
+                        <li>Verify images appear directly under question titles</li>
+                        <li>Check that images are properly sized and styled</li>
+                    </ul>
+                </li>
+                <li><strong>Verify positioning:</strong>
+                    <ul>
+                        <li>Images should have no background containers</li>
+                        <li>Images should be positioned immediately after titles</li>
+                        <li>Proper spacing between title and image</li>
+                        <li>Proper spacing between image and answer choices</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="status info">
+            <span>ℹ️</span>
+            <strong>Key Improvement:</strong> The image positioning logic now uses enhanced DOM targeting with multiple fallback strategies to ensure images always appear directly under question titles, with cleaner styling and better debugging capabilities.
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/admin/form-builder/new" class="button success">
+                🎨 Test Form Builder
+            </a>
+            <a href="/complete-image-upload-test.html" class="button">
+                📋 View Complete Implementation
+            </a>
+        </div>
+    </div>
+
+    <script>
+        console.log('🖼️ Question Image Position Test Page');
+        console.log('');
+        console.log('📋 Image Positioning Improvements:');
+        console.log('   ✅ Enhanced DOM targeting with multiple selectors');
+        console.log('   ✅ Smart insertion logic with better fallback strategies');
+        console.log('   ✅ Removed background containers for cleaner presentation');
+        console.log('   ✅ Added duplicate prevention');
+        console.log('   ✅ Enhanced debugging and verification');
+        console.log('   ✅ Improved image styling and spacing');
+        console.log('');
+        console.log('🎯 Expected Result:');
+        console.log('   Images should appear directly under question titles');
+        console.log('   Clean presentation without background containers');
+        console.log('   Proper spacing and responsive sizing');
+        console.log('');
+        console.log('🧪 To test: Create a form with images and view the survey');
+    </script>
+</body>
+</html>

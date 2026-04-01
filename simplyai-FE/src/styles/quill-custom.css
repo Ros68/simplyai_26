@@ -1,0 +1,160 @@
+/* quill-custom.css - Updated with better resize handle */
+
+/* Base editor styles */
+.ql-container {
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.ql-editor {
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Image styles */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  cursor: default;
+  transition: all 0.2s ease;
+  display: inline-block;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+/* Selected image - blue outline */
+.ql-editor img.ql-image-selected {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+}
+
+/* Resize handle - visible and clickable */
+.ql-editor img.ql-image-selected {
+  position: relative;
+}
+
+.ql-editor img.ql-image-selected::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-primary);
+  border: 3px solid white;
+  border-radius: 50%;
+  cursor: se-resize;
+  z-index: 10000;
+  pointer-events: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  opacity: 0.9;
+  transition: all 0.2s ease;
+}
+
+.ql-editor img.ql-image-selected:hover::after {
+  transform: scale(1.1);
+  background-color: #7c3aed;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+
+/* Resize handle area (invisible but larger for easier grabbing) */
+.ql-editor img.ql-image-selected::before {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 40px;
+  height: 40px;
+  cursor: se-resize;
+  z-index: 9999;
+  background: transparent;
+}
+
+/* Resizing state */
+.ql-editor img.resizing {
+  opacity: 0.8;
+  transition: none;
+  outline: 3px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+.ql-editor img.resizing::after {
+  opacity: 1;
+  transform: scale(1.1);
+  background-color: #7c3aed;
+}
+
+/* Image wrapper for additional control */
+.ql-image-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Grid layouts */
+.ql-editor .grid {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.ql-editor .grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ql-editor .grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ql-editor .col {
+  padding: 0.5rem;
+  border: 1px dashed #e5e7eb;
+  border-radius: 0.375rem;
+}
+
+/* Sections */
+.ql-editor section {
+  margin: 2rem 0;
+  padding: 1rem;
+  border: 1px solid #f3f4f6;
+  border-radius: 0.5rem;
+  background-color: #fafafa;
+}
+
+/* Fix empty paragraphs */
+.ql-editor p:empty {
+  display: none;
+}
+
+.ql-image-selected {
+  outline: 2px solid #2563eb !important;
+  position: relative;
+}
+
+.ql-image-selected::after,
+.ql-image-selected::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #2563eb;
+  border-radius: 50%;
+}
+
+.ql-image-selected::after {
+  bottom: -5px;
+  right: -5px;
+}
+
+.ql-image-selected::before {
+  top: -5px;
+  left: -5px;
+}
+
+.resizing {
+  opacity: 0.8;
+}

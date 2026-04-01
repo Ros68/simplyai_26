@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Test Form with Question Image</title>
+</head>
+<body>
+    <h1>Create Test Form with Question Image</h1>
+    
+    <button onclick="createTestForm()">Create Test Form</button>
+    <div id="result"></div>
+    
+    <script>
+        async function createTestForm() {
+            // Create a simple form with a question that has an image
+            const formData = {
+                title: 'Debug Test Form - Question Images',
+                description: 'This form is for debugging question image display',
+                surveyJSON: {
+                    "title": "Debug Test Form - Question Images",
+                    "description": "This form is for debugging question image display",
+                    "pages": [
+                        {
+                            "name": "page1",
+                            "elements": [
+                                {
+                                    "type": "text",
+                                    "name": "questionWithImage",
+                                    "title": "Question with Image (should show image below)",
+                                    "description": "This question should display an image",
+                                    "questionImage": "http://localhost:4000/uploads/logo-1751987807219-433703543.jpg",
+                                    "questionImageDescription": "Test image"
+                                },
+                                {
+                                    "type": "text", 
+                                    "name": "questionWithoutImage",
+                                    "title": "Question without Image (no image should show)",
+                                    "description": "This question has no image"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                status: 'published',
+                createdBy: 'debug-test'
+            };
+            
+            try {
+                const response = await fetch('/api/forms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const formId = result.id;
+                    document.getElementById('result').innerHTML = `
+                        <h3>✅ Test form created successfully!</h3>
+                        <p><strong>Form ID:</strong> ${formId}</p>
+                        <p><strong>Questionnaire URL:</strong> <a href="/questionnaire/${formId}" target="_blank">http://localhost:8081/questionnaire/${formId}</a></p>
+                        <p><strong>SurveyJS URL:</strong> <a href="/questionnaire-surveyjs/${formId}" target="_blank">http://localhost:8081/questionnaire-surveyjs/${formId}</a></p>
+                        <p>Open both URLs to compare - the question image should appear in both.</p>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `<p style="color: red;">❌ Failed: ${result.message}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

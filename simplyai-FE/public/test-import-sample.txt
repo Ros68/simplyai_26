@@ -1,0 +1,64 @@
+Number of the Question: 1
+Page: 1
+Type of question: text
+Description: What is your full name?
+Image path: 
+Options/ answers:
+Guide: Please enter your complete legal name
+Lesson: Personal identification helps us personalize your experience
+Condition logic:
+
+Number of the Question: 2
+Page: 1
+Type of question: radiogroup
+Description: How often do you reflect on your learning progress?
+Image path: /uploads/learning-reflection.jpg
+Options/ answers:
+a) Always, I learn (score: 1)
+b) Often, I try (score: 2)
+c) Sometimes, it depends (score: 3)
+d) Rarely, I focus on the present (score: 4)
+e) Never, I don't think about it (score: 5)
+Guide: Think about your regular learning habits
+Lesson: Self-reflection is key to continuous improvement
+Condition logic:
+
+Number of the Question: 3
+Page: 2
+Type of question: checkbox
+Description: Which learning methods work best for you?
+Image path: /uploads/learning-methods.png
+Options/ answers:
+a) Visual materials (score: 1)
+b) Audio content (score: 2)
+c) Hands-on practice (score: 3)
+d) Reading and writing (score: 4)
+e) Group discussions (score: 5)
+Guide: Select all methods that apply to you
+Lesson: Understanding your learning style improves effectiveness
+Condition logic: if Q2 <= 3 then show Q3
+
+Number of the Question: 4
+Page: 2
+Type of question: rating
+Description: How would you rate your current skill level?
+Image path: 
+Options/ answers:
+a) 1 - Beginner (score: 1)
+b) 2 - Basic (score: 2)
+c) 3 - Intermediate (score: 3)
+d) 4 - Advanced (score: 4)
+e) 5 - Expert (score: 5)
+Guide: Be honest about your current abilities
+Lesson: Accurate self-assessment guides effective learning paths
+Condition logic:
+
+Number of the Question: 5
+Page: 3
+Type of question: comment
+Description: What are your main learning goals for the next 6 months?
+Image path: /uploads/goals-illustration.jpg
+Options/ answers:
+Guide: Be specific and measurable in your goals
+Lesson: Clear goals provide direction and motivation for learning
+Condition logic: if Q4 >= 3 then show Q5

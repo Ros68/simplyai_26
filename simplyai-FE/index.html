@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simolyai-report-craft</title>
+    <meta name="description" content="Lovable Generated Project" />
+    <meta name="author" content="Lovable" />
+    <div id="portal-root"></div>
+    <!-- Add this -->
+
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/favicon.ico"
+      id="favicon-link"
+    />
+    <link rel="stylesheet" href="/fonts.css" />
+
+    <!-- Dynamic font styles -->
+    <style id="dynamic-font-styles">
+      /* Font size classes */
+      .font-size-small {
+        font-size: 14px !important;
+      }
+      .font-size-small * {
+        font-size: inherit;
+      }
+
+      .font-size-medium {
+        font-size: 16px !important;
+      }
+      .font-size-medium * {
+        font-size: inherit;
+      }
+
+      .font-size-large {
+        font-size: 18px !important;
+      }
+      .font-size-large * {
+        font-size: inherit;
+      }
+
+      /* Ensure font family is inherited throughout */
+      * {
+        font-family: var(
+          --font-family,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif
+        ) !important;
+      }
+
+      /* Override for specific elements that might have custom fonts */
+      body,
+      html,
+      div,
+      p,
+      span,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      a,
+      button,
+      input,
+      textarea,
+      select {
+        font-family: inherit !important;
+      }
+
+      /* Button Style Classes */
+
+      /* Pill Style - Very rounded */
+      .button-style-pill button,
+      .button-style-pill .btn,
+      .button-style-pill input[type="button"],
+      .button-style-pill input[type="submit"],
+      .button-style-pill [role="button"] {
+        border-radius: 50px !important;
+      }
+
+      /* Rounded Style - Medium rounded corners */
+      .button-style-rounded button,
+      .button-style-rounded .btn,
+      .button-style-rounded input[type="button"],
+      .button-style-rounded input[type="submit"],
+      .button-style-rounded [role="button"] {
+        border-radius: 8px !important;
+      }
+
+      /* Square Style - No rounded corners */
+      .button-style-square button,
+      .button-style-square .btn,
+      .button-style-square input[type="button"],
+      .button-style-square input[type="submit"],
+      .button-style-square [role="button"] {
+        border-radius: 0px !important;
+      }
+
+      /* Apply to common UI component classes */
+      .button-style-pill .Button,
+      .button-style-pill .button,
+      .button-style-pill .ui-button {
+        border-radius: 50px !important;
+      }
+
+      .button-style-rounded .Button,
+      .button-style-rounded .button,
+      .button-style-rounded .ui-button {
+        border-radius: 8px !important;
+      }
+
+      .button-style-square .Button,
+      .button-style-square .button,
+      .button-style-square .ui-button {
+        border-radius: 0px !important;
+      }
+
+      /* Apply to form inputs and select elements too */
+      .button-style-pill input[type="text"],
+      .button-style-pill input[type="email"],
+      .button-style-pill input[type="password"],
+      .button-style-pill select,
+      .button-style-pill textarea {
+        border-radius: 25px !important;
+      }
+
+      .button-style-rounded input[type="text"],
+      .button-style-rounded input[type="email"],
+      .button-style-rounded input[type="password"],
+      .button-style-rounded select,
+      .button-style-rounded textarea {
+        border-radius: 6px !important;
+      }
+
+      .button-style-square input[type="text"],
+      .button-style-square input[type="email"],
+      .button-style-square input[type="password"],
+      .button-style-square select,
+      .button-style-square textarea {
+        border-radius: 0px !important;
+      }
+
+      /* Apply to card and panel components */
+      .button-style-pill .card,
+      .button-style-pill .panel,
+      .button-style-pill .modal {
+        border-radius: 20px !important;
+      }
+
+      .button-style-rounded .card,
+      .button-style-rounded .panel,
+      .button-style-rounded .modal {
+        border-radius: 12px !important;
+      }
+
+      .button-style-square .card,
+      .button-style-square .panel,
+      .button-style-square .modal {
+        border-radius: 0px !important;
+      }
+    </style>
+
+    <meta property="og:title" content="simolyai-report-craft" />
+    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://lovable.dev/opengraph-image-p98pqg.png"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta
+      name="twitter:image"
+      content="https://lovable.dev/opengraph-image-p98pqg.png"
+    />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+
+    <!-- Favicon updater script -->
+    <script>
+      // Debounce function to prevent rapid consecutive calls
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      // Function to apply font settings from database
+      function applyFontSettings(data) {
+        if (!data) return;
+
+        try {
+          const root = document.documentElement;
+
+          // Apply font family
+          if (data.font_family) {
+            let fontStack = "";
+
+            switch (data.font_family) {
+              case "poppins":
+                fontStack =
+                  '"Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                break;
+              case "roboto":
+                fontStack =
+                  '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                break;
+              case "inter":
+                fontStack =
+                  '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                break;
+              case "lato":
+                fontStack =
+                  '"Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                break;
+              case "montserrat":
+                fontStack =
+                  '"Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                break;
+              default:
+                fontStack =
+                  '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+            }
+
+            root.style.setProperty("--font-family", fontStack);
+            document.body.style.fontFamily = fontStack;
+
+            console.log(
+              "Font family applied:",
+              data.font_family,
+              "→",
+              fontStack
+            );
+          }
+
+          // Apply font size
+          if (data.font_size) {
+            // Remove existing font size classes safely
+            document.body.classList.remove(
+              "font-size-small",
+              "font-size-medium",
+              "font-size-large"
+            );
+
+            // Add new font size class
+            document.body.classList.add(`font-size-${data.font_size}`);
+
+            // Set CSS custom property for font size
+            let baseFontSize = "16px"; // default
+            switch (data.font_size) {
+              case "small":
+                baseFontSize = "14px";
+                break;
+              case "medium":
+                baseFontSize = "16px";
+                break;
+              case "large":
+                baseFontSize = "18px";
+                break;
+            }
+
+            root.style.setProperty("--base-font-size", baseFontSize);
+            root.style.fontSize = baseFontSize;
+
+            console.log(
+              "Font size applied:",
+              data.font_size,
+              "→",
+              baseFontSize
+            );
+          }
+
+          // Apply button style
+          if (data.button_style) {
+            // Remove existing button style classes
+            document.body.classList.remove(
+              "button-style-pill",
+              "button-style-rounded",
+              "button-style-square"
+            );
+
+            // Add new button style class
+            document.body.classList.add(`button-style-${data.button_style}`);
+
+            // Set CSS custom property for button style
+            root.style.setProperty("--button-style", data.button_style);
+
+            console.log("Button style applied:", data.button_style);
+          }
+
+          // Load Google Fonts if needed (with delay to prevent conflicts)
+          setTimeout(() => {
+            loadGoogleFonts(data.font_family);
+          }, 100);
+        } catch (error) {
+          console.error("Error applying font settings:", error);
+        }
+      }
+
+      // Function to load Google Fonts dynamically
+      function loadGoogleFonts(fontFamily) {
+        try {
+          if (!fontFamily || fontFamily === "system") return;
+
+          const fontMap = {
+            poppins: "Poppins:300,400,500,600,700",
+            roboto: "Roboto:300,400,500,700",
+            inter: "Inter:300,400,500,600,700",
+            lato: "Lato:300,400,700",
+            montserrat: "Montserrat:300,400,500,600,700",
+          };
+
+          const googleFontFamily = fontMap[fontFamily];
+          if (!googleFontFamily) return;
+
+          // Check if font is already loaded
+          const existingLink = document.querySelector(
+            `link[href*="${googleFontFamily}"]`
+          );
+          if (existingLink) return;
+
+          // Create and append Google Fonts link
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = `https://fonts.googleapis.com/css2?family=${googleFontFamily}&display=swap`;
+          document.head.appendChild(link);
+
+          console.log("Google Font loaded:", googleFontFamily);
+        } catch (error) {
+          console.error("Error loading Google Fonts:", error);
+        }
+      }
+
+      // Debounced version of applyFontSettings to prevent rapid updates
+      const debouncedApplyFontSettings = debounce(applyFontSettings, 300);
+
+      function getApiBaseUrl() {
+        // Try to get from global config if available (set by main app)
+        if (window.__APP_CONFIG__ && window.__APP_CONFIG__.API_BASE_URL) {
+          return window.__APP_CONFIG__.API_BASE_URL;
+        }
+
+        // If no global config available, we can't determine the API URL
+        // This should not happen in normal operation since main.tsx sets it
+        console.warn(
+          "No API base URL configuration found. Please ensure the React app has loaded properly."
+        );
+        return null;
+      }
+
+      // Function to update favicon
+      // 1. YEH FUNCTION REPLACE KAREIN
+      function updateFavicon() {
+        const API_BASE_URL = getApiBaseUrl();
+        if (!API_BASE_URL) return;
+
+        fetch(`${API_BASE_URL}/settings`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success && data.data) {
+              debouncedApplyFontSettings(data.data);
+            }
+
+            // 🌟 YAHAN LOGO FETCH HOTA HAI
+            const logoUrl = data.success && data.data ? data.data.logo : null;
+
+            if (logoUrl) {
+              const faviconLink = document.getElementById("favicon-link");
+              if (faviconLink) {
+                const timestamp = Date.now();
+                const newFaviconUrl = `${logoUrl}?v=${timestamp}`;
+
+                const fileExtension = logoUrl.split(".").pop().toLowerCase();
+                let mimeType = "image/x-icon";
+                if (fileExtension === "png") mimeType = "image/png";
+                else if (fileExtension === "jpg" || fileExtension === "jpeg") mimeType = "image/jpeg";
+                else if (fileExtension === "svg") mimeType = "image/svg+xml";
+
+                faviconLink.href = newFaviconUrl;
+                faviconLink.type = mimeType;
+
+                // 🌟 FIX: SAFE REMOVAL TO PREVENT CRASH
+                if (faviconLink.parentNode) {
+                  faviconLink.parentNode.removeChild(faviconLink);
+                }
+                setTimeout(() => {
+                  document.head.appendChild(faviconLink);
+                }, 100);
+              }
+            }
+          })
+          .catch((error) => console.error("Error fetching favicon:", error));
+      }
+
+      // 2. YEH LISTENER REPLACE KAREIN
+      window.addEventListener("faviconUpdated", function (event) {
+        const faviconLink = document.getElementById("favicon-link");
+        const newUrl = event.detail?.logoUrl || event.detail?.faviconUrl;
+        
+        if (faviconLink && newUrl) {
+          const timestamp = Date.now();
+          const newFaviconUrl = `${newUrl}?v=${timestamp}`;
+
+          const fileExtension = newUrl.split(".").pop().toLowerCase();
+          let mimeType = "image/x-icon";
+          if (fileExtension === "png") mimeType = "image/png";
+          else if (fileExtension === "jpg" || fileExtension === "jpeg") mimeType = "image/jpeg";
+          else if (fileExtension === "svg") mimeType = "image/svg+xml";
+
+          faviconLink.href = newFaviconUrl;
+          faviconLink.type = mimeType;
+
+          // 🌟 FIX: SAFE REMOVAL
+          if (faviconLink.parentNode) {
+            faviconLink.parentNode.removeChild(faviconLink);
+          }
+          setTimeout(() => {
+            document.head.appendChild(faviconLink);
+          }, 100);
+        }
+      });
+      // Update favicon on page load (with delay to ensure app config is loaded)
+      document.addEventListener("DOMContentLoaded", () => {
+        // Wait for React app to load and set global config
+        setTimeout(updateFavicon, 500);
+      });
+
+      // Listen for favicon update events from admin settings
+      // 1. YEH FUNCTION REPLACE KAREIN
+      function updateFavicon() {
+        const API_BASE_URL = getApiBaseUrl();
+        if (!API_BASE_URL) return;
+
+        fetch(`${API_BASE_URL}/settings`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success && data.data) {
+              debouncedApplyFontSettings(data.data);
+            }
+
+            // 🌟 YAHAN LOGO FETCH HOTA HAI
+            const logoUrl = data.success && data.data ? data.data.logo : null;
+
+            if (logoUrl) {
+              const faviconLink = document.getElementById("favicon-link");
+              if (faviconLink) {
+                const timestamp = Date.now();
+                const newFaviconUrl = `${logoUrl}?v=${timestamp}`;
+
+                const fileExtension = logoUrl.split(".").pop().toLowerCase();
+                let mimeType = "image/x-icon";
+                if (fileExtension === "png") mimeType = "image/png";
+                else if (fileExtension === "jpg" || fileExtension === "jpeg") mimeType = "image/jpeg";
+                else if (fileExtension === "svg") mimeType = "image/svg+xml";
+
+                faviconLink.href = newFaviconUrl;
+                faviconLink.type = mimeType;
+
+                // 🌟 FIX: SAFE REMOVAL TO PREVENT CRASH
+                if (faviconLink.parentNode) {
+                  faviconLink.parentNode.removeChild(faviconLink);
+                }
+                setTimeout(() => {
+                  document.head.appendChild(faviconLink);
+                }, 100);
+              }
+            }
+          })
+          .catch((error) => console.error("Error fetching favicon:", error));
+      }
+
+      // 2. YEH LISTENER REPLACE KAREIN
+      window.addEventListener("faviconUpdated", function (event) {
+        const faviconLink = document.getElementById("favicon-link");
+        const newUrl = event.detail?.logoUrl || event.detail?.faviconUrl;
+        
+        if (faviconLink && newUrl) {
+          const timestamp = Date.now();
+          const newFaviconUrl = `${newUrl}?v=${timestamp}`;
+
+          const fileExtension = newUrl.split(".").pop().toLowerCase();
+          let mimeType = "image/x-icon";
+          if (fileExtension === "png") mimeType = "image/png";
+          else if (fileExtension === "jpg" || fileExtension === "jpeg") mimeType = "image/jpeg";
+          else if (fileExtension === "svg") mimeType = "image/svg+xml";
+
+          faviconLink.href = newFaviconUrl;
+          faviconLink.type = mimeType;
+
+          // 🌟 FIX: SAFE REMOVAL
+          if (faviconLink.parentNode) {
+            faviconLink.parentNode.removeChild(faviconLink);
+          }
+          setTimeout(() => {
+            document.head.appendChild(faviconLink);
+          }, 100);
+        }
+      });
+
+          console.log(
+            "Favicon updated via event to:",
+            newFaviconUrl,
+            "with type:",
+            mimeType
+          );
+
+          // Force favicon refresh by removing and re-adding the link
+          
+
+      // Listen for font settings update events from admin settings
+      window.addEventListener("fontSettingsUpdated", function (event) {
+        console.log("Font settings update event received:", event.detail);
+        if (event.detail && event.detail.fontSettings) {
+          debouncedApplyFontSettings(event.detail.fontSettings);
+        }
+      });
+    </script>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

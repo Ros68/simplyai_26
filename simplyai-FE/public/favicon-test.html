@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favicon Test</title>
+    <link rel="icon" type="image/jpeg" href="/favicon-1758469695691-131427000.jpg" id="test-favicon">
+</head>
+<body>
+    <h1>Favicon Test Page</h1>
+    <p>This page should show your custom favicon in the browser tab.</p>
+    
+    <div>
+        <h2>Current favicon info:</h2>
+        <p>URL: <span id="favicon-url"></span></p>
+        <p>Type: <span id="favicon-type"></span></p>
+    </div>
+    
+    <button onclick="updateFaviconInfo()">Check Favicon</button>
+    <button onclick="forceRefreshFavicon()">Force Refresh Favicon</button>
+    
+    <script>
+        function updateFaviconInfo() {
+            const faviconLink = document.getElementById('test-favicon');
+            document.getElementById('favicon-url').textContent = faviconLink.href;
+            document.getElementById('favicon-type').textContent = faviconLink.type;
+        }
+        
+        function forceRefreshFavicon() {
+            const faviconLink = document.getElementById('test-favicon');
+            const head = document.head;
+            const timestamp = Date.now();
+            
+            // Clone the link with new timestamp
+            const newLink = faviconLink.cloneNode();
+            newLink.href = `/favicon-1758469695691-131427000.jpg?v=${timestamp}`;
+            
+            // Remove old and add new
+            head.removeChild(faviconLink);
+            head.appendChild(newLink);
+            
+            // Update ID
+            newLink.id = 'test-favicon';
+            
+            updateFaviconInfo();
+        }
+        
+        // Initialize
+        updateFaviconInfo();
+    </script>
+</body>
+</html>

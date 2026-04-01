@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site URL Dynamic Loading Test - SimolyAI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #9b87f5;
+        }
+        .result {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+        .error {
+            background-color: #fee;
+            color: #c33;
+        }
+        .success {
+            background-color: #efe;
+            color: #393;
+        }
+        button {
+            background-color: #9b87f5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #8b77e5;
+        }
+        .instructions {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #9b87f5;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Site URL Dynamic Loading Test</h1>
+        
+        <div class="instructions">
+            <h3>📋 Test Instructions:</h3>
+            <ol>
+                <li>Click "Test Current Settings" to see what's currently in the database</li>
+                <li>Go to <strong>Admin → Settings</strong> and update the "Site URL" field</li>
+                <li>Save the settings</li>
+                <li>Return here and click "Test Current Settings" again</li>
+                <li>Visit the homepage and check if the footer link uses your new URL</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Current Settings Test</h3>
+            <p>This will check what Site URL and Contact Email are currently stored in the database:</p>
+            <button onclick="testCurrentSettings()">Test Current Settings</button>
+            <div id="currentSettings" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🌍 Frontend Integration Test</h3>
+            <p>These links simulate how the homepage footer will behave:</p>
+            <div id="frontendTest">
+                <button onclick="simulateFooterBehavior()">Simulate Footer Link</button>
+                <div id="footerSimulation" class="result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ Expected Behavior</h3>
+            <ul>
+                <li><strong>If Site URL is set:</strong> Footer will display the site URL and link to it in a new tab</li>
+                <li><strong>If Site URL is empty:</strong> Footer will display the contact email and open email client (mailto:)</li>
+                <li><strong>Dynamic Display:</strong> Shows the actual site URL from database, not the email</li>
+                <li><strong>Homepage Footer:</strong> Will update automatically when settings change</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        async function testCurrentSettings() {
+            const resultDiv = document.getElementById('currentSettings');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '⏳ Loading settings...';
+
+            try {
+                const response = await fetch('http://localhost:4000/api/settings');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    const settings = data.data;
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Settings Retrieved Successfully:</strong><br>
+                        🌐 Site URL: ${settings.site_url || '(not set)'}<br>
+                        📧 Contact Email: ${settings.contact_email || 'info@simolyai.com'}<br>
+                        🏷️ Site Name: ${settings.site_name || 'SimolyAI'}<br>
+                        📝 Description: ${settings.site_description || 'N/A'}<br><br>
+                        <strong>Footer Link Behavior:</strong><br>
+                        ${settings.site_url 
+                            ? `🔗 Will display and link to: <a href="${settings.site_url}" target="_blank">${settings.site_url}</a>`
+                            : `📬 Will display and email to: <a href="mailto:${settings.contact_email || 'info@simolyai.com'}">${settings.contact_email || 'info@simolyai.com'}</a>`
+                        }
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ Failed to get settings data';
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `❌ Error: ${error.message}<br><br>
+                    <strong>Possible causes:</strong><br>
+                    • Backend server not running<br>
+                    • Database connection issue<br>
+                    • CORS policy blocking request`;
+            }
+        }
+
+        async function simulateFooterBehavior() {
+            const resultDiv = document.getElementById('footerSimulation');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '⏳ Simulating footer behavior...';
+
+            try {
+                const response = await fetch('http://localhost:4000/api/settings');
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    const settings = data.data;
+                    const contactEmail = settings.contact_email || 'info@simolyai.com';
+                    
+                    if (settings.site_url) {
+                        resultDiv.className = 'result success';
+                        resultDiv.innerHTML = `
+                            <strong>🌐 Site URL Mode Active:</strong><br>
+                            Footer will show: <a href="${settings.site_url}" target="_blank" rel="noopener noreferrer">${settings.site_url}</a><br>
+                            <em>Click opens: ${settings.site_url} in new tab</em>
+                        `;
+                    } else {
+                        resultDiv.className = 'result success';
+                        resultDiv.innerHTML = `
+                            <strong>📧 Email Mode Active:</strong><br>
+                            Footer will show: <a href="mailto:${contactEmail}">${contactEmail}</a><br>
+                            <em>Click opens: Default email client</em>
+                        `;
+                    }
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '❌ Could not simulate footer behavior';
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `❌ Simulation failed: ${error.message}`;
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            testCurrentSettings();
+        };
+    </script>
+</body>
+</html>

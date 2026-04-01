@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plans API Test</title>
+</head>
+<body>
+    <h1>Plans API Test</h1>
+    <div id="result"></div>
+    <script>
+        async function testPlansAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch('http://localhost:4000/api/plans/admin/all');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <h2>Success!</h2>
+                    <p>Found ${data.data ? data.data.length : 0} plans</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h2>Error!</h2>
+                    <p>${error.message}</p>
+                `;
+                console.error('Error:', error);
+            }
+        }
+        
+        testPlansAPI();
+    </script>
+</body>
+</html>

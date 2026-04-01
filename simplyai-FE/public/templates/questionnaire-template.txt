@@ -1,0 +1,102 @@
+Number of the Question: 1
+Page: 1
+Type of question: text
+Description: Please enter your complete name as it appears on official documents
+Image path: 
+Options/ answers:
+Guide: Consider your legal name as it appears on your ID
+Lesson: Personal information helps us tailor the experience
+Condition logic:
+
+Number of the Question: 2
+Page: 1
+Type of question: number
+Description: Please enter your current age in years
+Image path: 
+Options/ answers:
+Guide: Enter your age in whole years
+Lesson: Age demographics help us understand our audience
+Condition logic:
+
+Number of the Question: 3
+Page: 2
+Type of question: radiogroup
+Description: Please select your gender identity
+Image path: /uploads/gender-icons.png
+Options/ answers:
+a) Male (score: 1)
+b) Female (score: 2)
+c) Other (score: 3)
+d) Prefer not to say (score: 4)
+Guide: Choose the option that best represents your identity
+Lesson: Gender diversity is important for inclusive design
+Condition logic:
+
+Number of the Question: 4
+Page: 2
+Type of question: dropdown
+Description: Select your highest level of education completed
+Image path: 
+Options/ answers:
+a) High School (score: 1)
+b) Bachelor's Degree (score: 2)
+c) Master's Degree (score: 3)
+d) PhD (score: 4)
+e) Other (score: 5)
+Guide: Select the highest degree you have completed
+Lesson: Education levels help us understand learning preferences
+Condition logic:
+
+Number of the Question: 5
+Page: 3
+Type of question: comment
+Description: Please describe your hobbies and interests in detail
+Image path: /uploads/hobbies-illustration.jpg
+Options/ answers:
+Guide: Take your time to think about activities that bring you joy and relaxation
+Lesson: Understanding hobbies helps us understand personal interests and lifestyle choices
+Condition logic:
+
+Number of the Question: 6
+Page: 3
+Type of question: rating
+Description: How would you rate your overall satisfaction with our service?
+Image path: 
+Options/ answers:
+a) 1 - Very Dissatisfied (score: 1)
+b) 2 - Dissatisfied (score: 2)
+c) 3 - Neutral (score: 3)
+d) 4 - Satisfied (score: 4)
+e) 5 - Very Satisfied (score: 5)
+Guide: Consider all aspects of your experience when rating
+Lesson: Customer satisfaction is crucial for improving our services
+Condition logic:
+
+Number of the Question: 7
+Page: 4
+Type of question: checkbox
+Description: Which social media platforms do you use regularly? (Select all that apply)
+Image path: /uploads/social-media-icons.png
+Options/ answers:
+a) Facebook (score: 1)
+b) Instagram (score: 2)
+c) Twitter (score: 3)
+d) LinkedIn (score: 4)
+e) TikTok (score: 5)
+f) YouTube (score: 6)
+g) None of the above (score: 0)
+Guide: Select all platforms you use at least once a week
+Lesson: Social media usage patterns help us understand communication preferences
+Condition logic: if Q6 >= 4 then show Q7
+
+Number of the Question: 8
+Page: 4
+Type of question: boolean
+Description: Would you recommend our service to others?
+Image path: 
+Options/ answers:
+a) Yes (score: 1)
+b) No (score: 0)
+Guide: Consider your overall experience when answering this question
+Lesson: Word-of-mouth recommendations are valuable for our growth
+Condition logic: if Q6 >= 3 then show Q8 

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Image Upload Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .section h2 {
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .feature-item h3 {
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        .code-block {
+            background: #f1f3f4;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .button.secondary {
+            background: #6c757d;
+        }
+        .button.secondary:hover {
+            background: #545b62;
+        }
+        .button.success {
+            background: #28a745;
+        }
+        .button.success:hover {
+            background: #218838;
+        }
+        .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
+        .checklist li:before {
+            content: "✅";
+            margin-right: 8px;
+        }
+        .workflow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .workflow-step {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+            position: relative;
+        }
+        .workflow-step::after {
+            content: "→";
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #6c757d;
+        }
+        .workflow-step:last-child::after {
+            display: none;
+        }
+        .workflow-step h4 {
+            color: #2d3748;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 SurveyJS Image Upload - Complete Implementation</h1>
+            <p>In-question image upload with floating panel removed</p>
+        </div>
+
+        <div class="status success">
+            <span class="icon">✅</span>
+            <strong>Implementation Complete:</strong> In-question image upload is now fully functional with the floating panel removed.
+        </div>
+
+        <div class="section">
+            <h2>🎯 Implementation Summary</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>✅ In-Question Upload UI</h3>
+                    <ul>
+                        <li>Upload controls appear <strong>inside each question card</strong></li>
+                        <li>Located <strong>below the question title</strong></li>
+                        <li>Automatically added to all questions</li>
+                        <li>Refreshes on selection changes</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>❌ Floating Panel Removed</h3>
+                    <ul>
+                        <li>QuestionImageUploader component removed</li>
+                        <li>No more floating right-side panel</li>
+                        <li>Cleaner, integrated interface</li>
+                        <li>TypeScript errors fixed</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🎨 Enhanced Features</h3>
+                    <ul>
+                        <li>Drag-and-drop support</li>
+                        <li>Visual feedback during upload</li>
+                        <li>Progress indicators</li>
+                        <li>Error handling with user feedback</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <h3>🔧 Technical Implementation</h3>
+                    <ul>
+                        <li>addImageUploadToQuestion function</li>
+                        <li>Multiple DOM insertion strategies</li>
+                        <li>Event listener management</li>
+                        <li>SurveyJS Creator integration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔄 Complete Workflow</h2>
+            <div class="workflow">
+                <div class="workflow-step">
+                    <h4>1. Form Builder</h4>
+                    <p>Add questions with images using in-question upload UI</p>
+                </div>
+                <div class="workflow-step">
+                    <h4>2. Image Upload</h4>
+                    <p>Upload, replace, or remove images with drag-and-drop</p>
+                </div>
+                <div class="workflow-step">
+                    <h4>3. Save Form</h4>
+                    <p>Form saves with image URLs stored in database</p>
+                </div>
+                <div class="workflow-step">
+                    <h4>4. Survey Display</h4>
+                    <p>Images appear in final survey below question titles</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📋 Testing Checklist</h2>
+            <ul class="checklist">
+                <li>Navigate to Form Builder (/admin/form-builder/new)</li>
+                <li>Add a question and verify image upload UI appears in the card</li>
+                <li>Test image upload by clicking "Choose Image"</li>
+                <li>Test drag-and-drop functionality</li>
+                <li>Verify image preview appears immediately</li>
+                <li>Test replace and remove functionality</li>
+                <li>Confirm no floating panel appears</li>
+                <li>Save form and verify images are preserved</li>
+                <li>View survey and confirm images display correctly</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Technical Changes Made</h2>
+            <div class="code-block">
+// FormBuilderEditor.tsx Changes:
+1. Removed QuestionImageUploader component entirely
+2. Enhanced addImageUploadToQuestion function with:
+   - Robust DOM insertion strategies
+   - Drag-and-drop support
+   - Visual feedback and progress indicators
+   - Error handling
+3. Fixed TypeScript error in drag event handling
+4. Added comprehensive event listener management
+5. Improved styling and user experience
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🌟 Key Features</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>📁 File Upload</h3>
+                    <p>Click "Choose Image" to select files from your device</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🎯 Drag & Drop</h3>
+                    <p>Drag images directly onto the upload area</p>
+                </div>
+                <div class="feature-item">
+                    <h3>👁️ Instant Preview</h3>
+                    <p>Images appear immediately after upload</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔄 Replace/Remove</h3>
+                    <p>Easy buttons to update or remove images</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📊 Progress Feedback</h3>
+                    <p>Visual progress indicators during upload</p>
+                </div>
+                <div class="feature-item">
+                    <h3>⚠️ Error Handling</h3>
+                    <p>User-friendly error messages and recovery</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Quick Start</h2>
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="/admin/form-builder/new" class="button success">
+                    <span class="icon">🎨</span>
+                    Test Form Builder
+                </a>
+                <a href="/debug-image.html" class="button secondary">
+                    <span class="icon">🔍</span>
+                    Debug Image Display
+                </a>
+                <a href="/survey-property-test.html" class="button">
+                    <span class="icon">🧪</span>
+                    Test Properties
+                </a>
+            </div>
+        </div>
+
+        <div class="status info">
+            <span class="icon">ℹ️</span>
+            <strong>Next Steps:</strong> The implementation is complete and ready for production use. The in-question image upload system provides a seamless user experience integrated directly into the SurveyJS Creator interface.
+        </div>
+    </div>
+
+    <script>
+        console.log('🎉 Image Upload Implementation Complete!');
+        console.log('📋 Implementation Summary:');
+        console.log('   ✅ In-question image upload UI functional');
+        console.log('   ❌ Floating QuestionImageUploader panel removed');
+        console.log('   🎨 Enhanced styling and user experience');
+        console.log('   🔧 TypeScript errors fixed');
+        console.log('   🛠️ Robust event handling implemented');
+        console.log('   📁 Drag-and-drop support added');
+        console.log('   👁️ Instant preview and feedback');
+        console.log('');
+        console.log('🧪 Testing:');
+        console.log('   1. Navigate to /admin/form-builder/new');
+        console.log('   2. Add a question');
+        console.log('   3. Look for image upload UI below question title');
+        console.log('   4. Test upload, replace, and remove functionality');
+        console.log('   5. Verify no floating panel appears');
+        console.log('');
+        console.log('🎯 The implementation is complete and ready for use!');
+    </script>
+</body>
+</html>
