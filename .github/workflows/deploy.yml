@@ -1,0 +1,65 @@
+name: Deploy su cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout codice
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # ── Build React frontend ───────────────────────────────────────────
+      - name: Installa dipendenze React
+        run: |
+          cd simplyai-FE
+          npm install
+
+      - name: Build React
+        run: |
+          cd simplyai-FE
+          npm run build
+        env:
+          CI: false
+
+      # ── Deploy Frontend via FTP ────────────────────────────────────────
+      - name: Deploy Frontend via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          port: 21
+          local-dir: simplyai-FE/dist/
+          server-dir: /
+          dangerous-clean-slate: false
+
+      # ── Deploy Backend via FTP ─────────────────────────────────────────
+      - name: Deploy Backend via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER_BE }}
+          password: ${{ secrets.FTP_PASS_BE }}
+          port: 21
+          local-dir: simplyai-BE/
+          server-dir: /
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.env
+
+     
+
+

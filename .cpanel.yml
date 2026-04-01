@@ -1,0 +1,13 @@
+---
+deployment:
+  tasks:
+    # ── Copia il build React nella public_html ─────────────────────────
+    - export DEPLOYPATH=/home/rvtsmdqo/public_html
+    - /bin/cp -R simplyai-FE/build/* $DEPLOYPATH
+
+    # ── Installa dipendenze backend ────────────────────────────────────
+    - export NODEPATH=/home/rvtsmdqo/nodevenv/simplyai-BE/18/bin
+    - cd /home/rvtsmdqo/public_html/git.simplyai.it/simplyai-BE && $NODEPATH/npm install --production
+
+    # ── Riavvia Node.js ────────────────────────────────────────────────
+    - cd /home/rvtsmdqo/public_html/git.simplyai.it/simplyai-BE && $NODEPATH/node index.js &
