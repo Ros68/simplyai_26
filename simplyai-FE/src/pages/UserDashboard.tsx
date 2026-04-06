@@ -1,30 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { API_BASE_URL } from "@/config/api";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 
-// Import originali - NON toccati
+// Import originali della dashboard (importanti!)
 import { UserProfile } from "./dashboard/UserProfile";
 import { UserReports } from "./dashboard/UserReports";
 import { UserQuestionnaires } from "./dashboard/UserQuestionnaires";
 import { UserSubscriptions } from "./dashboard/UserSubscriptions";
 
-import {
-  LogOut,
-  CheckSquare,
-  FileText,
-  FileDown,
-  User,
-  Menu,
-} from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 
 // Import Footer
 import Footer from "@/components/Footer";
@@ -76,54 +65,30 @@ const UserDashboard = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar Desktop */}
+      {/* Sidebar Desktop - Semplificata per evitare errori */}
       {!isMobile && (
-        <div className="w-64 border-r bg-white shadow-sm h-screen hidden md:block">
+        <div className="w-64 border-r bg-white shadow-sm h-screen hidden md:block p-4">
           <div className="flex flex-col h-full">
-            <div className="p-4 border-b">
-              {logoUrl && (
-                <Link to="/" className="block mx-auto">
-                  <img src={logoUrl} alt="Logo" className="h-20 w-20 object-contain" />
-                </Link>
-              )}
-            </div>
+            {logoUrl && (
+              <img src={logoUrl} alt="Logo" className="h-16 w-16 mx-auto mb-6 object-contain" />
+            )}
 
-            <div className="flex flex-col p-2 space-y-1 mt-4">
-              <Button
-                variant={activeTab === "questionnaires" ? "default" : "ghost"}
-                className="justify-start"
-                onClick={() => setActiveTab("questionnaires")}
-              >
-                <CheckSquare className="mr-2 h-4 w-4" />
+            <div className="space-y-2">
+              <Button variant={activeTab === "questionnaires" ? "default" : "ghost"} className="w-full justify-start" onClick={() => setActiveTab("questionnaires")}>
                 Questionari
               </Button>
-              <Button
-                variant={activeTab === "reports" ? "default" : "ghost"}
-                className="justify-start"
-                onClick={() => setActiveTab("reports")}
-              >
-                <FileText className="mr-2 h-4 w-4" />
+              <Button variant={activeTab === "reports" ? "default" : "ghost"} className="w-full justify-start" onClick={() => setActiveTab("reports")}>
                 I miei report
               </Button>
-              <Button
-                variant={activeTab === "subscriptions" ? "default" : "ghost"}
-                className="justify-start"
-                onClick={() => setActiveTab("subscriptions")}
-              >
-                <FileDown className="mr-2 h-4 w-4" />
+              <Button variant={activeTab === "subscriptions" ? "default" : "ghost"} className="w-full justify-start" onClick={() => setActiveTab("subscriptions")}>
                 Abbonamenti
               </Button>
-              <Button
-                variant={activeTab === "profile" ? "default" : "ghost"}
-                className="justify-start"
-                onClick={() => setActiveTab("profile")}
-              >
-                <User className="mr-2 h-4 w-4" />
+              <Button variant={activeTab === "profile" ? "default" : "ghost"} className="w-full justify-start" onClick={() => setActiveTab("profile")}>
                 Profilo
               </Button>
             </div>
 
-            <div className="mt-auto p-4">
+            <div className="mt-auto pt-6">
               <Button variant="outline" onClick={handleLogout} className="w-full">
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
@@ -133,29 +98,18 @@ const UserDashboard = () => {
         </div>
       )}
 
-      {/* Area principale */}
+      {/* Contenuto principale */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header Mobile */}
-        <header className="bg-white border-b py-3 px-4 flex justify-between items-center md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0 w-64">
-              {/* Sidebar mobile - semplificata */}
-            </SheetContent>
-          </Sheet>
-
+        <header className="bg-white border-b p-4 flex justify-end md:hidden">
           <Button variant="outline" size="sm" onClick={handleLogout}>
             Logout
           </Button>
         </header>
 
-        {/* Contenuto Tabs */}
-        <div className="flex-1 overflow-auto p-4 md:p-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        {/* Tabs Content */}
+        <div className="flex-1 overflow-auto p-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-6">
               <TabsTrigger value="questionnaires">Questionari</TabsTrigger>
               <TabsTrigger value="reports">I miei report</TabsTrigger>
@@ -170,7 +124,7 @@ const UserDashboard = () => {
           </Tabs>
         </div>
 
-        {/* Footer aggiunto in fondo */}
+        {/* Footer */}
         <Footer />
       </div>
     </div>
