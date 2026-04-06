@@ -10,10 +10,13 @@ import {
 import { API_BASE_URL } from "@/config/api";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+
+// Import originali - NON toccati
 import { UserProfile } from "./dashboard/UserProfile";
 import { UserReports } from "./dashboard/UserReports";
 import { UserQuestionnaires } from "./dashboard/UserQuestionnaires";
 import { UserSubscriptions } from "./dashboard/UserSubscriptions";
+
 import {
   LogOut,
   CheckSquare,
@@ -23,6 +26,7 @@ import {
   Menu,
 } from "lucide-react";
 
+// Import Footer
 import Footer from "@/components/Footer";
 
 const UserDashboard = () => {
@@ -78,17 +82,13 @@ const UserDashboard = () => {
           <div className="flex flex-col h-full">
             <div className="p-4 border-b">
               {logoUrl && (
-                <Link to="/" className="flex items-center justify-center">
-                  <img
-                    src={logoUrl}
-                    alt="Logo"
-                    className="h-20 w-20 object-contain"
-                  />
+                <Link to="/" className="block mx-auto">
+                  <img src={logoUrl} alt="Logo" className="h-20 w-20 object-contain" />
                 </Link>
               )}
             </div>
 
-            <div className="flex flex-col space-y-1 p-2 mt-4">
+            <div className="flex flex-col p-2 space-y-1 mt-4">
               <Button
                 variant={activeTab === "questionnaires" ? "default" : "ghost"}
                 className="justify-start"
@@ -133,9 +133,9 @@ const UserDashboard = () => {
         </div>
       )}
 
-      {/* Contenuto principale */}
+      {/* Area principale */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header solo mobile */}
+        {/* Header Mobile */}
         <header className="bg-white border-b py-3 px-4 flex justify-between items-center md:hidden">
           <Sheet>
             <SheetTrigger asChild>
@@ -144,10 +144,7 @@ const UserDashboard = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0 w-64">
-              {/* Sidebar mobile content */}
-              <div className="flex flex-col h-full p-4">
-                {/* Puoi lasciare vuoto o copiare la sidebar qui se vuoi */}
-              </div>
+              {/* Sidebar mobile - semplificata */}
             </SheetContent>
           </Sheet>
 
@@ -158,7 +155,7 @@ const UserDashboard = () => {
 
         {/* Contenuto Tabs */}
         <div className="flex-1 overflow-auto p-4 md:p-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-6">
               <TabsTrigger value="questionnaires">Questionari</TabsTrigger>
               <TabsTrigger value="reports">I miei report</TabsTrigger>
@@ -173,7 +170,7 @@ const UserDashboard = () => {
           </Tabs>
         </div>
 
-        {/* Footer */}
+        {/* Footer aggiunto in fondo */}
         <Footer />
       </div>
     </div>
