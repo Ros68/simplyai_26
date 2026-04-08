@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// 🌟 FIX: Yahan apni nayi domain direct likh di hai taake .env ka masla na aaye!
-// Jab localhost par test karna ho toh isko "http://localhost:8081" kar lena.
-const APP_URL = "https://git.simplyai.it"; 
+// ✅ FIX: APP_URL ab .env ke FRONTEND_URL se aata hai
+// Agar FRONTEND_URL change ho (localhost -> production domain) tu email links automatically update ho jayenge
+const APP_URL = process.env.FRONTEND_URL || process.env.BACKEND_URL || "http://localhost:4000";
 
 // Create transporter with Gmail SMTP (priority) or Brevo as fallback
 let transporter;

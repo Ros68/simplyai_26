@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import MainNavigation from "@/components/MainNavigation";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { API_BASE_URL } from "@/config/api";
@@ -11,12 +12,14 @@ import "../assets/surveyjs-defaultV2.min.css";
 import ReactModal from "react-modal";
 import { registerCustomProperties } from "@/lib/surveyjs-properties";
 import { saveQuestionnaireCompletion } from "@/services/questionnaireService";
+import { useSettings } from "@/contexts/SettingsContext";
 
 const Questionnaire = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
+  const { settings: appSettings } = useSettings(); // 🌟 YEH LINE ADD KAREIN
 
   const [planId, setPlanId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -269,13 +272,24 @@ const Questionnaire = () => {
       styleTag.id = styleId;
       styleTag.innerHTML = `
         button[title*="Previous"], input[value*="Previous"], .sv_nav input[value*="Previous"], .sv-action-bar input[value*="Previous"], .sv-footer input[value*="Previous"] {
-          background: #ffffff !important; color: #9333ea !important; border: 2px solid #9333ea !important; font-weight: 600 !important; border-radius: 6px !important; transition: all 0.2s ease-in-out !important;
+          background: #ffffff !important; color: ${appSettings?.primary_color || '#9333ea'} !important; border: 2px solid ${appSettings?.primary_color || '#9333ea'} !important; font-weight: 600 !important; border-radius: 6px !important; transition: all 0.2s ease-in-out !important;
         }
         button[title*="Previous"]:hover, input[value*="Previous"]:hover, .sv_nav input[value*="Previous"]:hover, .sv-action-bar input[value*="Previous"]:hover, .sv-footer input[value*="Previous"]:hover {
-          background: #faf5ff !important; color: var(--color-primary) !important; border-color: var(--color-primary) !important;
+          background: #faf5ff !important; color: ${appSettings?.secondary_color || '#7e22ce'} !important; border-color: ${appSettings?.secondary_color || '#7e22ce'} !important;
         }
         button[title*="Next"], input[value*="Next"], input[value*="Submit"], .sv_nav input[value*="Next"], .sv_nav input[value*="Submit"], .sv-action-bar input[value*="Next"], .sv-action-bar input[value*="Submit"], .sv-footer input[value*="Next"], .sv-footer input[value*="Submit"] {
           display: none !important;
+        }
+        /* 🌟 FIX: SurveyJS 'Completa/Complete' Button par Primary color aur hover par Secondary color */
+        input[type="button"][value*="Completa"], input[type="button"][value*="Complete"], .sv-btn.sv-footer__complete-btn {
+          background-color: ${appSettings?.primary_color || '#9333ea'} !important;
+          color: #ffffff !important;
+          border: none !important;
+          transition: all 0.3s ease !important;
+        }
+        input[type="button"][value*="Completa"]:hover, input[type="button"][value*="Complete"]:hover, .sv-btn.sv-footer__complete-btn:hover {
+          background-color: ${appSettings?.secondary_color || '#7e22ce'} !important;
+          opacity: 1 !important;
         }
       `;
       document.head.appendChild(styleTag);
@@ -285,7 +299,7 @@ const Questionnaire = () => {
     const observer = new MutationObserver(() => { setTimeout(forceButtonStyles, 100); });
     observer.observe(document.body, { childList: true, subtree: true });
     return () => { observer.disconnect(); document.getElementById("force-purple-buttons")?.remove(); };
-  }, [survey]);
+  }, [survey, appSettings]); 
 
   useEffect(() => {
     if (!surveyJson) { setSurvey(null); return; }
@@ -383,33 +397,37 @@ const Questionnaire = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6 w-full">
-        <MainNavigation variant="questionnaire" title="Caricamento..." />
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
         <div className="flex justify-center items-center h-[60vh] w-full">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (!surveyJson || !survey) {
     return (
-      <div className="container mx-auto p-6 w-full">
-        <MainNavigation variant="questionnaire" title="Errore" />
-        <div className="text-center py-12 w-full">
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="flex-1 text-center py-12 w-full">
           <h2 className="text-2xl font-bold mb-4">Questionario non trovato</h2>
           <button className="btn bg-[var(--color-primary)] text-white px-4 py-2 rounded" onClick={() => navigate("/dashboard")}>
             Torna alla Dashboard
           </button>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto w-full max-w-full">
-      <MainNavigation variant="questionnaire" title={title} />
-      
+    <div className="min-h-screen flex flex-col">
+      {/* ✅ FIX: Same Navbar as rest of site */}
+      <Navbar />
+
+      <div className="flex-1 container mx-auto w-full max-w-full">
       {/* 🌟 FIX 9.5: Increased width (max-w-[1400px]) for much larger form area */}
       <div className="max-w-[1400px] w-full mx-auto p-4 sm:p-6">
         
@@ -538,6 +556,10 @@ const Questionnaire = () => {
           </div>
         </div>
       </ReactModal>
+      </div>{/* end flex-1 container */}
+
+      {/* ✅ FIX: Same Footer as rest of site */}
+      <Footer />
     </div>
   );
 };

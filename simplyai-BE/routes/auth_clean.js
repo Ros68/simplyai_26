@@ -65,6 +65,25 @@ router.post("/register", validateRegistration, async (req, res) => {
 
     console.log("Registration attempt:", { email, firstName, lastName });
 
+    // ✅ FIX: Check if registration is enabled in settings
+    try {
+      const [settingsRows] = await pool.query(
+        "SELECT enable_registration FROM app_settings ORDER BY created_at DESC LIMIT 1"
+      );
+      if (settingsRows.length > 0) {
+        const isEnabled = settingsRows[0].enable_registration === 1 || settingsRows[0].enable_registration === true;
+        if (!isEnabled) {
+          return res.status(403).json({
+            success: false,
+            message: "La registrazione è attualmente disabilitata.",
+          });
+        }
+      }
+    } catch (settingsErr) {
+      console.error("Error checking registration setting:", settingsErr.message);
+      // Continue if settings check fails
+    }
+
     const result = await AuthService.registerUser({
       email,
       password,
@@ -74,6 +93,22 @@ router.post("/register", validateRegistration, async (req, res) => {
       address,
       fiscalCode,
     });
+
+    // ✅ FIX: Admin notification after successful registration
+    try {
+      const [adminSettings] = await pool.query(
+        "SELECT send_admin_notification, contact_email FROM app_settings ORDER BY created_at DESC LIMIT 1"
+      );
+      const shouldNotify = adminSettings.length > 0 ? Boolean(adminSettings[0].send_admin_notification) : true;
+      const adminEmail = adminSettings.length > 0 ? adminSettings[0].contact_email : null;
+      if (shouldNotify && adminEmail) {
+        const { sendAdminNewUserNotification } = await import("../services/emailService.js");
+        await sendAdminNewUserNotification(adminEmail, { firstName, lastName, email });
+        console.log("✅ Admin notification sent for new user:", email);
+      }
+    } catch (adminErr) {
+      console.error("Admin notification error:", adminErr.message);
+    }
 
     console.log("User registered successfully:", result.data.user.id);
 
@@ -1354,6 +1389,22 @@ router.post("/register-with-plan", async (req, res) => {
       } catch (emailError) {
         console.error("Email sending failed:", emailError);
         // Don't fail registration if email fails
+      }
+
+      // ✅ FIX: Admin notification for register-with-plan
+      try {
+        const [adminSettings] = await pool.query(
+          "SELECT send_admin_notification, contact_email FROM app_settings ORDER BY created_at DESC LIMIT 1"
+        );
+        const shouldNotify = adminSettings.length > 0 ? Boolean(adminSettings[0].send_admin_notification) : true;
+        const adminEmail = adminSettings.length > 0 ? adminSettings[0].contact_email : null;
+        if (shouldNotify && adminEmail) {
+          const { sendAdminNewUserNotification } = await import("../services/emailService.js");
+          await sendAdminNewUserNotification(adminEmail, { firstName, lastName, email });
+          console.log("✅ Admin notification sent (register-with-plan):", email);
+        }
+      } catch (adminErr) {
+        console.error("Admin notification error (register-with-plan):", adminErr.message);
       }
 
       res.status(201).json({

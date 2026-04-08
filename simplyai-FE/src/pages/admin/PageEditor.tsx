@@ -94,7 +94,7 @@ const BlockEditorQuill = ({ value, onChange }: { value: string, onChange: (val: 
     }
   }), [imageHandler]);
 
-  // 🌟 TUMHARI ORIGINAL IMAGE RESIZE LOGIC
+  // 🌟 IMAGE RESIZE LOGIC
   useEffect(() => {
     if (quillRef.current) {
       const quill = quillRef.current.getEditor();
@@ -179,7 +179,7 @@ const BlockEditorQuill = ({ value, onChange }: { value: string, onChange: (val: 
           isResizing = false; currentImage.classList.remove('resizing');
           currentImage.setAttribute('width', currentImage.style.width.replace('px', ''));
           currentImage.setAttribute('height', currentImage.style.height.replace('px', ''));
-          onChange(quill.root.innerHTML); // Update block state!
+          onChange(quill.root.innerHTML);
           currentImage = null; resizeDirection = '';
         }
       };
@@ -219,13 +219,61 @@ const BlockEditorQuill = ({ value, onChange }: { value: string, onChange: (val: 
 };
 
 // Default pages for initial database seeding only
+// ✅ Contact page ka default content — admin Page Editor mein edit kar sakta hai
+// Email/phone/address cards aur contact form sab yahan hain
+const defaultContactContent = `<div class="simply-page-content">
+  <div class="simply-section w-full my-6">
+    <h1 style="text-align:center;font-size:2.2rem;font-weight:700;margin-bottom:1rem;">Contattaci</h1>
+    <p style="text-align:center;color:#6b7280;font-size:1.1rem;max-width:600px;margin:0 auto 2rem;">
+      Siamo qui per rispondere a tutte le tue domande e aiutarti a ottenere il massimo dalla nostra piattaforma.
+    </p>
+  </div>
+  <div class="simply-section w-full my-6 flex flex-col md:flex-row gap-6">
+    <div class="simply-col flex-1 min-w-0">
+      <div class="contact-info-card">
+        <div class="contact-icon">✉</div>
+        <div><h3 style="font-weight:600;font-size:1rem;margin:0 0 4px;">Email</h3><p style="color:#6b7280;margin:0;">info@simolyai.com</p></div>
+      </div>
+      <div class="contact-info-card">
+        <div class="contact-icon">📞</div>
+        <div><h3 style="font-weight:600;font-size:1rem;margin:0 0 4px;">Telefono</h3><p style="color:#6b7280;margin:0;">+39 123 456 7890</p></div>
+      </div>
+      <div class="contact-info-card">
+        <div class="contact-icon">📍</div>
+        <div><h3 style="font-weight:600;font-size:1rem;margin:0 0 4px;">Indirizzo</h3><p style="color:#6b7280;margin:0;">Via Roma 123, 00100 Roma, Italy</p></div>
+      </div>
+    </div>
+    <div class="simply-col flex-1 min-w-0" style="flex:2;">
+      <div class="contact-form-wrap">
+        <h2 style="font-size:1.4rem;font-weight:600;margin:0 0 1.5rem;">Inviaci un messaggio</h2>
+        <div id="contact-success" class="contact-success">✓ Messaggio inviato con successo! Ti risponderemo al più presto.</div>
+        <form id="contact-form">
+          <div class="contact-form-grid">
+            <div><label>Nome</label><input type="text" name="name" placeholder="Il tuo nome" required /></div>
+            <div><label>Email</label><input type="email" name="email" placeholder="La tua email" required /></div>
+          </div>
+          <label>Oggetto</label>
+          <input type="text" name="subject" placeholder="Oggetto del messaggio" />
+          <label>Messaggio</label>
+          <textarea name="message" rows="5" placeholder="Il tuo messaggio" required style="resize:vertical;"></textarea>
+          <button type="submit" id="contact-submit" class="contact-submit-btn">Invia messaggio</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>`;
+
 const defaultPages = [
   { id: "home", title: "Home", menuTitle: "Home", content: "<h1>Benvenuti in SimplyAI</h1><p>La piattaforma intelligente per l'analisi dei dati aziendali</p>", inMainMenu: true, order: 1 },
   { id: "about", title: "Chi Siamo", menuTitle: "Chi Siamo", content: "<h1>Chi Siamo</h1><p>SimplyAI è una piattaforma innovativa...</p>", inMainMenu: true, order: 2 },
   { id: "guide", title: "Guida", menuTitle: "Guida", content: "<h1>Guida all'uso</h1><p>Benvenuti alla guida...</p>", inMainMenu: true, order: 3 },
-  { id: "contact", title: "Contatti", menuTitle: "Contatti", content: "<h1>Contattaci</h1><p>Siamo qui per aiutarti...</p>", inMainMenu: true, order: 4 },
+  { id: "contact", title: "Contatti", menuTitle: "Contatti", content: defaultContactContent, inMainMenu: true, order: 4 },
   { id: "pricing", title: "Prezzi", menuTitle: "Prezzi", content: "<h1>I nostri piani</h1><p>Scegli il piano più adatto...</p>", inMainMenu: true, order: 5 },
 ];
+
+// ✅ FIX ISSUE 2: Blocks ko HTML mein embed karne ki key - ye comment-style DATA attribute hai
+// Ye HTML comment ke andar JSON store karta hai taake safely recover ho sake
+const BLOCKS_DATA_PREFIX = "simply-blocks-data:";
 
 const PageEditor = () => {
   const { toast } = useToast();
@@ -239,7 +287,7 @@ const PageEditor = () => {
   const [filterMainMenu, setFilterMainMenu] = useState(false);
   const [filteredPages, setFilteredPages] = useState<PageContent[]>([]);
   
-  // 🌟 NAYA BLOCK STATE
+  // 🌟 BLOCK STATE
   const [blocks, setBlocks] = useState<EditorBlock[]>([]);
 
   const cleanHTML = (html: string) => {
@@ -251,9 +299,13 @@ const PageEditor = () => {
     return cleaned;
   };
 
-  // 🌟 CONVERT BLOCKS TO FINAL HTML (For frontend)
+  // ✅ FIX ISSUE 2: CONVERT BLOCKS TO FINAL HTML
+  // Blocks ka JSON data HTML comment mein safely store karta hai
   const blocksToHtml = (currentBlocks: EditorBlock[]) => {
-    const rawData = encodeURIComponent(JSON.stringify(currentBlocks));
+    // JSON ko base64 mein encode karo taake special chars safe rahein
+    const blocksJson = JSON.stringify(currentBlocks);
+    const encoded = btoa(unescape(encodeURIComponent(blocksJson)));
+    
     const htmlContent = currentBlocks.map(block => {
       if (block.type === 'full') {
         return `<div class="simply-section w-full my-6">${block.content[0]}</div>`;
@@ -262,22 +314,64 @@ const PageEditor = () => {
         return `<div class="simply-section w-full my-6 flex flex-col md:flex-row gap-6">${cols}</div>`;
       }
     }).join('');
-    return `\n<div class="simply-page-content">\n${htmlContent}\n</div>`;
+    
+    // ✅ FIX: Data ko HTML comment mein store karo - ye render nahi hota lekin parse hota hai
+    return `<!-- ${BLOCKS_DATA_PREFIX}${encoded} -->\n<div class="simply-page-content">\n${htmlContent}\n</div>`;
   };
 
-  // 🌟 EXTRACT BLOCKS FROM LOADED HTML
-  // 🌟 EXTRACT BLOCKS FROM LOADED HTML
+  // ✅ FIX ISSUE 2: EXTRACT BLOCKS FROM LOADED HTML
+  // Ab HTML comment se JSON properly extract hoga
   const htmlToBlocks = (html: string): EditorBlock[] => {
     if (!html) return [{ id: generateId(), type: 'full', content: [''] }];
     
-    // 🌟 FIX: Used new RegExp string so it never gets stripped by code editors during copy/paste
-    const regex = new RegExp("");
-    const match = html.match(regex);
+    // ✅ FIX: HTML comment se data extract karo
+    const commentRegex = /<!--\s*simply-blocks-data:([A-Za-z0-9+/=]+)\s*-->/;
+    const match = html.match(commentRegex);
     
     if (match && match[1]) {
-      try { return JSON.parse(decodeURIComponent(match[1])); } catch(e) { console.error("Parse error", e); }
+      try {
+        const decoded = decodeURIComponent(escape(atob(match[1])));
+        const parsed = JSON.parse(decoded);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch(e) {
+        console.error("Block data parse error:", e);
+      }
     }
-    return [{ id: generateId(), type: 'full', content: [html] }]; // Fallback for old pages
+    
+    // ✅ Fallback: Agar koi purana format hai (simply-section divs) to unhe blocks mein convert karo
+    const sectionRegex = /<div class="simply-section[^"]*">([\s\S]*?)<\/div>\s*(?=<div class="simply-section|<\/div>|$)/g;
+    const sections: EditorBlock[] = [];
+    let sectionMatch;
+    
+    // Simply section wale divs dhundo
+    const pageContentMatch = html.match(/<div class="simply-page-content">([\s\S]*)<\/div>\s*$/);
+    const contentToParse = pageContentMatch ? pageContentMatch[1] : html;
+    
+    // Multi-col sections dhundo
+    const allSectionRegex = /<div class="simply-section[^"]*">([\s\S]*?)<\/div>(?=\s*<div class="simply-section|\s*<\/div>|\s*$)/g;
+    while ((sectionMatch = allSectionRegex.exec(contentToParse)) !== null) {
+      const sectionContent = sectionMatch[1];
+      // Check karo agar isme simply-col divs hain (multi-column)
+      const colMatches = sectionContent.match(/<div class="simply-col[^"]*">([\s\S]*?)<\/div>/g);
+      if (colMatches && colMatches.length > 1) {
+        const colContents = colMatches.map(col => {
+          const colContentMatch = col.match(/<div class="simply-col[^"]*">([\s\S]*?)<\/div>/);
+          return colContentMatch ? colContentMatch[1] : '';
+        });
+        const colCount = colContents.length;
+        const blockType: BlockType = colCount === 2 ? '2-col' : colCount === 3 ? '3-col' : '4-col';
+        sections.push({ id: generateId(), type: blockType, content: colContents });
+      } else {
+        sections.push({ id: generateId(), type: 'full', content: [sectionContent] });
+      }
+    }
+    
+    if (sections.length > 0) return sections;
+    
+    // Last fallback: sab kuch ek editor mein
+    return [{ id: generateId(), type: 'full', content: [html] }];
   };
 
   useEffect(() => {
@@ -333,6 +427,8 @@ const PageEditor = () => {
       if (success) {
         const updatedPages = pages.map((page) => page.id === currentPage.id ? { ...page, content: finalHtml, title: currentPage.title } : page);
         setPages(updatedPages);
+        // ✅ currentPage state bhi update karo taake reload pe fresh data mile
+        setCurrentPage(prev => prev ? { ...prev, content: finalHtml } : prev);
         window.dispatchEvent(new CustomEvent('pagesUpdated'));
         toast({ title: "Pagina salvata", description: `La pagina "${currentPage.title}" è stata salvata.` });
       } else throw new Error("Failed to save page");
@@ -421,9 +517,10 @@ const PageEditor = () => {
 
   // 🌟 BLOCK MANAGEMENT FUNCTIONS
   const addBlock = (type: BlockType) => {
+    const colCount = type === 'full' ? 1 : parseInt(type[0]);
     const newBlock: EditorBlock = {
       id: generateId(), type,
-      content: type === 'full' ? ['<p><br></p>'] : Array(parseInt(type[0])).fill('<p><br></p>')
+      content: Array(colCount).fill('<p><br></p>')
     };
     setBlocks([...blocks, newBlock]);
   };
@@ -530,7 +627,7 @@ const PageEditor = () => {
               </CardHeader>
 
               <CardContent>
-                {/* 🌟 BLOCK EDITOR UI (WordPress Gutenberg Style) */}
+                {/* 🌟 BLOCK EDITOR UI */}
                 <div className="space-y-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
                   {blocks.map((block, index) => (
                     <div key={block.id} className="relative border-2 border-transparent hover:border-primary/30 p-3 bg-white rounded-lg shadow-sm transition-all group">

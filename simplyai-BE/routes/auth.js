@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import { pool } from "../db.js";
-import { sendPaymentNotificationEmail } from "../services/emailService.js";
+import { sendPaymentNotificationEmail, sendAdminNewUserNotification } from "../services/emailService.js";
 
 // Helper function to get default free plan ID
 async function getDefaultFreePlanId() {
@@ -154,6 +154,26 @@ router.post("/register-with-plan", async (req, res) => {
         });
       } catch (emailError) {
         // Don't fail registration if email fails
+      }
+
+      // ✅ FIX ISSUE 3: Admin notification email for new user (register-with-plan)
+      try {
+        const [adminSettings] = await pool.query(
+          "SELECT send_admin_notification, contact_email FROM app_settings ORDER BY created_at DESC LIMIT 1"
+        );
+        const shouldNotifyAdmin = adminSettings.length > 0
+          ? Boolean(adminSettings[0].send_admin_notification)
+          : true;
+        const adminEmail = adminSettings.length > 0
+          ? adminSettings[0].contact_email
+          : process.env.GMAIL_EMAIL || process.env.BREVO_EMAIL;
+
+        if (shouldNotifyAdmin && adminEmail) {
+          await sendAdminNewUserNotification(adminEmail, { firstName, lastName, email });
+          console.log("✅ Admin notification sent (register-with-plan):", email);
+        }
+      } catch (adminEmailError) {
+        console.error("Failed to send admin notification (register-with-plan):", adminEmailError);
       }
 
       res.status(201).json({
@@ -409,6 +429,35 @@ router.post("/register", async (req, res) => {
             "📧 Welcome email disabled in settings - skipping email for:",
             email
           );
+        }
+
+        // ✅ FIX ISSUE 3: Admin notification email for new user registration
+        try {
+          const [adminSettings] = await pool.query(
+            "SELECT send_admin_notification, contact_email FROM app_settings ORDER BY created_at DESC LIMIT 1"
+          );
+          const shouldNotifyAdmin = adminSettings.length > 0
+            ? Boolean(adminSettings[0].send_admin_notification)
+            : true; // Default to true if no settings found
+          const adminEmail = adminSettings.length > 0
+            ? adminSettings[0].contact_email
+            : process.env.GMAIL_EMAIL || process.env.BREVO_EMAIL;
+
+          console.log("📧 Admin notification setting:", shouldNotifyAdmin, "-> Admin email:", adminEmail);
+
+          if (shouldNotifyAdmin && adminEmail) {
+            await sendAdminNewUserNotification(adminEmail, {
+              firstName,
+              lastName,
+              email,
+            });
+            console.log("✅ Admin notification email sent for new user:", email);
+          } else {
+            console.log("📧 Admin notification disabled or no admin email configured - skipping");
+          }
+        } catch (adminEmailError) {
+          console.error("Failed to send admin notification email:", adminEmailError);
+          // Don't fail the registration if admin email fails
         }
 
         res.status(201).json({
@@ -1414,6 +1463,26 @@ router.post("/register/complete-with-plan", async (req, res) => {
           emailError
         );
         // Don't fail the registration if email fails
+      }
+
+      // ✅ FIX ISSUE 3: Admin notification email for new user (complete-with-plan)
+      try {
+        const [adminSettings] = await pool.query(
+          "SELECT send_admin_notification, contact_email FROM app_settings ORDER BY created_at DESC LIMIT 1"
+        );
+        const shouldNotifyAdmin = adminSettings.length > 0
+          ? Boolean(adminSettings[0].send_admin_notification)
+          : true;
+        const adminEmail = adminSettings.length > 0
+          ? adminSettings[0].contact_email
+          : process.env.GMAIL_EMAIL || process.env.BREVO_EMAIL;
+
+        if (shouldNotifyAdmin && adminEmail) {
+          await sendAdminNewUserNotification(adminEmail, { firstName, lastName, email });
+          console.log("✅ Admin notification sent (complete-with-plan):", email);
+        }
+      } catch (adminEmailError) {
+        console.error("Failed to send admin notification (complete-with-plan):", adminEmailError);
       }
 
       res.status(201).json({

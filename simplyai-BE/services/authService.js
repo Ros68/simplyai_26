@@ -151,7 +151,8 @@ class AuthService {
     // Get user from database
     const [users] = await pool.execute(
       `SELECT p.id, p.email, p.first_name, p.last_name, p.phone, p.address, 
-              p.fiscal_code, p.role, p.subscription_plan, p.subscription_expiry, 
+              p.fiscal_code, p.role, p.subscription_plan, p.subscription_expiry,
+              p.email_verified,
               a.password_hash 
        FROM profiles p 
        JOIN auth a ON p.id = a.user_id 
@@ -173,6 +174,24 @@ class AuthService {
 
     if (!isPasswordValid) {
       throw new Error("Invalid email or password");
+    }
+
+    // ✅ FIX: Check require_email_verification setting
+    try {
+      const [settingsRows] = await pool.query(
+        "SELECT require_email_verification FROM app_settings ORDER BY created_at DESC LIMIT 1"
+      );
+      if (settingsRows.length > 0) {
+        const requireVerification = settingsRows[0].require_email_verification === 1 || settingsRows[0].require_email_verification === true;
+        if (requireVerification && user.email_verified === 0) {
+          throw new Error("Email non verificata. Controlla la tua casella di posta e clicca il link di verifica.");
+        }
+      }
+    } catch (settingsErr) {
+      // Re-throw if it's our verification error
+      if (settingsErr.message.includes("Email non verificata")) throw settingsErr;
+      // Otherwise just log and continue
+      console.error("Error checking email verification setting:", settingsErr.message);
     }
 
     // Update last activity
