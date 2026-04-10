@@ -28,12 +28,12 @@ import {
 const UserDashboard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const [activeTab, setActiveTab] = useState("questionnaires");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("auth_token");
+    const savedToken = localStorage.getItem("token");
     if (!savedToken) {
       navigate("/login");
       return;
@@ -118,6 +118,15 @@ const UserDashboard = () => {
       </div>
     </div>
   );
+
+  // ✅ Jab tak loading hai spinner dikhao — null nahi warna flicker hoga
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   if (!user) {
     return null;
