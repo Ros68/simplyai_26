@@ -70,7 +70,7 @@ const ResetPassword = () => {
     try {
       setIsLoading(true);
       const API_BASE_URL =
-        import.meta.env.VITE_API_BASE_URL || "https://simplyai.it/api";
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api";
       const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
